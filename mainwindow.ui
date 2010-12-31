@@ -1,0 +1,922 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>703</width>
+    <height>497</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="windowTitle">
+   <string>Spice Parameter Extractor</string>
+  </property>
+  <widget class="QWidget" name="centralWidget">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>16777215</width>
+     <height>16777215</height>
+    </size>
+   </property>
+   <layout class="QVBoxLayout" name="verticalLayout_4">
+    <item>
+     <widget class="QSplitter" name="splitter">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::NoFrame</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <property name="lineWidth">
+       <number>1</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="opaqueResize">
+       <bool>true</bool>
+      </property>
+      <property name="handleWidth">
+       <number>5</number>
+      </property>
+      <property name="childrenCollapsible">
+       <bool>false</bool>
+      </property>
+      <widget class="QWidget" name="verticalLayoutWidget_5">
+       <layout class="QVBoxLayout" name="verticalLayout_6">
+        <item>
+         <widget class="QSplitter" name="splitter_2">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
+           </size>
+          </property>
+          <property name="frameShape">
+           <enum>QFrame::NoFrame</enum>
+          </property>
+          <property name="frameShadow">
+           <enum>QFrame::Raised</enum>
+          </property>
+          <property name="lineWidth">
+           <number>1</number>
+          </property>
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="opaqueResize">
+           <bool>true</bool>
+          </property>
+          <property name="handleWidth">
+           <number>5</number>
+          </property>
+          <property name="childrenCollapsible">
+           <bool>false</bool>
+          </property>
+          <widget class="QWidget" name="verticalLayoutWidget_7">
+           <layout class="QVBoxLayout" name="verticalLayout_8">
+            <item>
+             <layout class="QVBoxLayout" name="model_files_2">
+              <item>
+               <widget class="QTableWidget" name="filestableWidget">
+                <property name="columnCount">
+                 <number>3</number>
+                </property>
+                <column/>
+                <column/>
+                <column/>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4">
+                <item>
+                 <widget class="QLineEdit" name="file_cir"/>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="file_out"/>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="file_exp"/>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="fileButton">
+                  <property name="text">
+                   <string>Add</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="fileButtonR">
+                  <property name="text">
+                   <string>Remove</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+          <widget class="QWidget" name="verticalLayoutWidget_8">
+           <layout class="QVBoxLayout" name="verticalLayout_9">
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_2">
+              <item>
+               <layout class="QVBoxLayout" name="model_params_2">
+                <item>
+                 <widget class="QTableWidget" name="modelparamtableWidget">
+                  <property name="columnCount">
+                   <number>4</number>
+                  </property>
+                  <column/>
+                  <column/>
+                  <column/>
+                  <column/>
+                 </widget>
+                </item>
+                <item>
+                 <layout class="QHBoxLayout" name="horizontalLayout_5">
+                  <item>
+                   <widget class="QComboBox" name="param_name">
+                    <property name="minimumSize">
+                     <size>
+                      <width>100</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <item>
+                     <property name="text">
+                      <string>NULL</string>
+                     </property>
+                    </item>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="param_min"/>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="param_init"/>
+                  </item>
+                  <item>
+                   <widget class="QLineEdit" name="param_max"/>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="modelButton">
+                    <property name="text">
+                     <string>Add</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QPushButton" name="modelButtonR">
+                    <property name="text">
+                     <string>Remove</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout">
+                <item>
+                 <widget class="QLabel" name="label">
+                  <property name="text">
+                   <string>Algorithm</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="comboBox">
+                  <item>
+                   <property name="text">
+                    <string>OptBCQNewton</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>LevMar</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>GA</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Evaluate</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>Sence analyz</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>OptCG</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>OptFDNIPS</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>OptPDS</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>My DirectSearch</string>
+                   </property>
+                  </item>
+                  <item>
+                   <property name="text">
+                    <string>My PG</string>
+                   </property>
+                  </item>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeType">
+                   <enum>QSizePolicy::Preferred</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>20</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton">
+                  <property name="text">
+                   <string>Run</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </widget>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="verticalLayoutWidget_6">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <layout class="QVBoxLayout" name="verticalLayout">
+          <item>
+           <widget class="QTreeView" name="treeView">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>0</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_3"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="Model_Label">
+            <property name="text">
+             <string>Model</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="model_path"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="OutParce_Label">
+            <property name="text">
+             <string>OutParce</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="OutParce"/>
+          </item>
+          <item>
+           <widget class="QLabel" name="ErrorFunction_Label">
+            <property name="text">
+             <string>ErrorFunction</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLineEdit" name="ErrorFunction"/>
+          </item>
+         </layout>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menuBar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>703</width>
+     <height>22</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>&amp;File</string>
+    </property>
+    <addaction name="actionOpen"/>
+    <addaction name="actionSave"/>
+    <addaction name="actionSave_as"/>
+   </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>&amp;Tools</string>
+    </property>
+    <addaction name="actionEditor"/>
+    <addaction name="actionConfilg"/>
+    <addaction name="actionManualFit"/>
+   </widget>
+   <widget class="QMenu" name="menuActuins">
+    <property name="title">
+     <string>Actions</string>
+    </property>
+    <addaction name="action_Plot"/>
+    <addaction name="action_Brows"/>
+    <addaction name="actionAutoFit"/>
+    <addaction name="actionRoll_Back"/>
+   </widget>
+   <widget class="QMenu" name="menuHelp">
+    <property name="title">
+     <string>Help</string>
+    </property>
+    <addaction name="actionAbout"/>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuTools"/>
+   <addaction name="menuActuins"/>
+   <addaction name="menuHelp"/>
+  </widget>
+  <widget class="QStatusBar" name="statusBar">
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+  </widget>
+  <action name="actionOpen">
+   <property name="icon">
+    <iconset resource="gui/textedit.qrc">
+     <normaloff>:/images/win/fileopen.png</normaloff>:/images/win/fileopen.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Open</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+O</string>
+   </property>
+  </action>
+  <action name="actionSave">
+   <property name="icon">
+    <iconset resource="gui/textedit.qrc">
+     <normaloff>:/images/win/filesave.png</normaloff>:/images/win/filesave.png</iconset>
+   </property>
+   <property name="text">
+    <string>&amp;Save</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
+   </property>
+  </action>
+  <action name="actionEditor">
+   <property name="text">
+    <string>&amp;Editor</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+E</string>
+   </property>
+  </action>
+  <action name="actionConfilg">
+   <property name="text">
+    <string>Confi&amp;g</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+G</string>
+   </property>
+  </action>
+  <action name="actionSave_as">
+   <property name="text">
+    <string>Save as</string>
+   </property>
+  </action>
+  <action name="action_Plot">
+   <property name="text">
+    <string>&amp;Plot</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+P</string>
+   </property>
+  </action>
+  <action name="actionExtractAll">
+   <property name="text">
+    <string>ExtractAll</string>
+   </property>
+  </action>
+  <action name="actionManualFit">
+   <property name="text">
+    <string>ManualFit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+M</string>
+   </property>
+  </action>
+  <action name="action_Brows">
+   <property name="text">
+    <string>Brows</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+B</string>
+   </property>
+  </action>
+  <action name="actionAutoFit">
+   <property name="text">
+    <string>AutoFit</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+L</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionRoll_Back">
+   <property name="text">
+    <string>Roll Back</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+R</string>
+   </property>
+  </action>
+  <action name="actionParameters">
+   <property name="text">
+    <string>Parameters</string>
+   </property>
+  </action>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources>
+  <include location="gui/textedit.qrc"/>
+ </resources>
+ <connections>
+  <connection>
+   <sender>actionOpen</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>open()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>309</x>
+     <y>200</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>treeView</sender>
+   <signal>customContextMenuRequested(QPoint)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>showPopup(QPoint)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>313</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>710</x>
+     <y>545</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelButtonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>395</x>
+     <y>433</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>529</x>
+     <y>547</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>treeView</sender>
+   <signal>clicked(QModelIndex)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>treeItemSelected(QModelIndex)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>660</x>
+     <y>261</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>406</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>fileButtonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>396</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>517</x>
+     <y>37</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>fileButtonR</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>fileButtonRClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>484</x>
+     <y>226</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>347</x>
+     <y>540</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>modelButtonR</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelButtonRClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>483</x>
+     <y>433</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>381</x>
+     <y>544</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave_as</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>save_as()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>406</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>calculate()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>484</x>
+     <y>466</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>789</x>
+     <y>544</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>comboBox</sender>
+   <signal>currentIndexChanged(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeCurve()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>254</x>
+     <y>467</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>120</x>
+     <y>544</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>model_path</sender>
+   <signal>editingFinished()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>changeCurve()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>696</x>
+     <y>369</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>809</x>
+     <y>500</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_Plot</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>plot()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>35</x>
+     <y>36</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionConfilg</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>OptParamsEdit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>25</x>
+     <y>37</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionEditor</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>Editor()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>1</x>
+     <y>113</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionExtractAll</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>ExtractAll()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>45</x>
+     <y>33</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionManualFit</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>manualFit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>25</x>
+     <y>39</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>param_name</sender>
+   <signal>activated(QString)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>GetParamValue(QString)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>74</x>
+     <y>434</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>189</x>
+     <y>549</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionSave</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>save()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>40</x>
+     <y>34</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>action_Brows</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>browseFile()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAutoFit</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>CurveSelect()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionRoll_Back</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>rollBack()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>actionAbout</sender>
+   <signal>activated()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>about()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>285</x>
+     <y>475</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>treeItemSelected()</slot>
+  <slot>treeItemSelected(QModelIndex)</slot>
+  <slot>treeItemSelected(QModelIndex*)</slot>
+  <slot>fileButtonClicked()</slot>
+  <slot>modelButtonClicked()</slot>
+  <slot>showPopup(QPoint)</slot>
+  <slot>newDev()</slot>
+  <slot>remDev()</slot>
+  <slot>InsertCurve()</slot>
+  <slot>remCurve()</slot>
+  <slot>filesTableClicked()</slot>
+  <slot>fileButtonRClicked()</slot>
+  <slot>modelButtonRClicked()</slot>
+  <slot>save_as()</slot>
+  <slot>browseFile()</slot>
+  <slot>calculate()</slot>
+  <slot>changeCurve()</slot>
+  <slot>rollBack()</slot>
+  <slot>plot()</slot>
+  <slot>ConfigEdit()</slot>
+  <slot>Editor()</slot>
+  <slot>ExtractAll()</slot>
+  <slot>manualFit()</slot>
+  <slot>CurveSelect()</slot>
+  <slot>GetParamValue(QString)</slot>
+  <slot>save()</slot>
+  <slot>about()</slot>
+  <slot>OptParamsEdit()</slot>
+ </slots>
+</ui>

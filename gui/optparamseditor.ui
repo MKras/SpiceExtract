@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>OptParamsEditor</class>
+ <widget class="QWidget" name="OptParamsEditor">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>392</width>
+    <height>394</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout_2">
+   <item>
+    <layout class="QVBoxLayout" name="verticalLayout">
+     <item>
+      <widget class="QTableWidget" name="OPtGlobPar_tableWidget">
+       <property name="columnCount">
+        <number>2</number>
+       </property>
+       <column/>
+       <column/>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="pushButton_Set">
+       <property name="text">
+        <string>Set</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="pushButton_Cansel">
+       <property name="text">
+        <string>Cansel</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>pushButton_Set</sender>
+   <signal>clicked()</signal>
+   <receiver>OptParamsEditor</receiver>
+   <slot>Edit()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>98</x>
+     <y>381</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>389</x>
+     <y>353</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton_Cansel</sender>
+   <signal>clicked()</signal>
+   <receiver>OptParamsEditor</receiver>
+   <slot>Cansel()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>243</x>
+     <y>371</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>7</x>
+     <y>362</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>Edit()</slot>
+  <slot>Cansel()</slot>
+ </slots>
+</ui>
