@@ -14,3 +14,5 @@ LevMar - http://www.ics.forth.gr/~lourakis/levmar/
 - download and install GALib (you will need llibga.so);
 - download and install LevMar (you will need liblevmar.a);
 … an also you will need libf2c.a (in /usr/lib/libf2c.a) library
+
+Building with presetted iexternal libraries or only with internal optimization methods:
