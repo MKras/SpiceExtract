@@ -18,7 +18,7 @@
 #include <stdio.h>
 
 
-#include <lm.h>
+//#include <lm.h>
 #include "core.h"
 // для отладки
 #include <QtGui>
@@ -430,7 +430,7 @@ int core (curve *cur, SpiceExtr *spe){
             resultvector[i]=x[i];
         }
 
-    }
+    }    
     if(cur->AlgOpt=="GA"){
         qDebug()<<"GA\n";
         for(i=0;i<dim; i++){
@@ -444,6 +444,7 @@ int core (curve *cur, SpiceExtr *spe){
     }
 
     /////////////////////////////////////////////////////
+#ifdef WITH_LM
     if(cur->AlgOpt=="LevMar"){ //LevMar
         qDebug()<<"LevMar\n";
 #define LM_DBL_PREC
@@ -612,6 +613,9 @@ int core (curve *cur, SpiceExtr *spe){
     };
     /////////////////////////////////////////////////////
     /////////////////////////////////////////////////////
+#else
+    qDebug()<<"LevMar Disabled. Rebuild using WITH_LM deffinition!\n";
+#endif
 
     //Выводим результаты расчетов
     //Окончательный расчет с оптимальными значениями параметров

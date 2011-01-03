@@ -12,6 +12,9 @@
 //#define ROS
 
 #define use_namespace
+#define WITH_GA
+#define WITH_OPTPP
+#define WITH_LM
 
 #include <string>
 #include <iostream>
@@ -20,9 +23,13 @@
 #include <vector>
 #include <stdio.h>
 
+#ifdef WITH_LM
 #include <lm.h>
+#endif
+#ifdef WITH_GA
 #include <ga/ga.h>
 #include <ga/std_stream.h>
+#endif
 #include <OptNIPS.h>
 #include <OptPDS.h>
 #include "../util/globals.h"
@@ -52,7 +59,10 @@ void OptppInit(int n, double* x);
 void OptppInit_cv(int n, ColumnVector& tx);
 void OptppFeval (int dim, double* x, double& fx, int& result);
 void Myfunc (int n, double *a, double &fx);
+
+#ifdef WITH_LM
 void LevMarEvalF(double *p, double *x, int m, int n, void *data);
+#endif
 
 void OptppFeval_conv (int dim, double* x, double& fx, int& result);
 void OptppFeval_conv_cv (int dim, const ColumnVector& tx, double& fx, int& result);
