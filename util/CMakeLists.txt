@@ -12,9 +12,8 @@ file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS} )
 
 
 include_directories(./)
-#add_executable(${PROJECT} ${${PROJECT}_SOURCE_LIST})
 
-qt4_wrap_cpp (${PROJECT}_MOC_SOURCES ${PROJECT}_HEADERS)
+qt4_wrap_cpp (${PROJECT}_MOC_SOURCES ${${PROJECT}_HEADERS})
 add_library (${PROJECT} STATIC ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES})	
 #set_target_properties(${PROJECT}  PROPERTIES COMPILE_DEFINITIONS "${DEFFINITIONS}")
 
