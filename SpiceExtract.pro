@@ -53,7 +53,7 @@ LIBS += -L/usr/local/lib \ # core libs
     -llapack \
     -lgslcblas \
     -lgsl \
-    #-llevmar \
+    -llevmar \
     -lnewton \
     -lga \
     -lnewmat \

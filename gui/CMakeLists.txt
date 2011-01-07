@@ -12,7 +12,10 @@ file(GLOB ${PROJECT}_UI *.ui )
 file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS} )
 
 
-include_directories(./)
+include_directories(
+	${CMAKE_SOURCE_DIR}
+        ${BUILD_ROOT}/gui
+	)
 #add_executable(${PROJECT} ${${PROJECT}_SOURCE_LIST})
 
 #set(${PROJECT}_UIS ${${PROJECT}_UI})

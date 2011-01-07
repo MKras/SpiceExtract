@@ -1,5 +1,6 @@
 #!/bin/sh
 
+rm -rf ./build/
 mkdir ../$(date +%Y-%m-%d)
 
 make clean

@@ -1,7 +1,7 @@
 #ifndef DUTCONFIG_H
 #define DUTCONFIG_H
 
- #include <QObject>
+#include <QObject>
 #include <stdlib.h>
 #include <iostream>
 #include <fstream>

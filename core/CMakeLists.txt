@@ -10,8 +10,10 @@ file(GLOB ${PROJECT}_SOURCES *.cpp )
 file(GLOB ${PROJECT}_HEADERS *.h *.hpp )
 file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS} )
 
-
-include_directories(./)
+include_directories(
+	${CMAKE_SOURCE_DIR}
+	${BUILD_ROOT}/core
+	)
 #add_executable(${PROJECT} ${${PROJECT}_SOURCE_LIST})
 
 qt4_wrap_cpp (${PROJECT}_MOC_SOURCES ${${PROJECT}_HEADERS})
