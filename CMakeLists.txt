@@ -4,6 +4,10 @@ set (PROJECT SpiceExtract)
 
 project (${PROJECT})
 
+#set (CMAKE_C_LINK_SHARED:STRING g++)
+#set (CMAKE_C_COMPILER g++)
+#set (CMAKE_CXX_COMPILER  g++)
+
 message( STATUS "\nBuilding ${PROJECT} started")
 
 file(GLOB ${PROJECT}_SOURCES *.cpp ) 
@@ -19,7 +23,7 @@ set (QWT_LIB ${QWT_DIR}/lib/libqwt.so.5.2.0)
 SET (BUILD_ROOT $ENV{BUILD_ROOT})
 
 ########### Temperary!!!!!!!!!!!!!
-#SET (BUILD_ROOT ./)
+SET (DEBUG ON)
 
 SET(QT_USE_QTXML TRUE)
 SET(QT_USE_QTSCRIPT TRUE)
@@ -49,18 +53,17 @@ include_directories(
 QT4_WRAP_UI(${PROJECT}_UIS_H ${${PROJECT}_UI})
 
 qt4_wrap_cpp (${PROJECT}_MOC_SOURCES ${${PROJECT}_HEADERS})
-add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H})	
-#set_target_properties(${PROJECT}  PROPERTIES COMPILE_DEFINITIONS "${DEFFINITIONS}")
-	
+
 add_subdirectory(core)
 add_subdirectory(gui)
 add_subdirectory(util)
+
+#add_dependencies (${PROJECT} Core GUI Util)
 
 set(LINK 
 	Core
 	GUI
 	Util
-
 	lapack
 	gslcblas 
 	gsl
@@ -69,17 +72,31 @@ set(LINK
 	ga
 	newmat
 	opt
-	/usr/lib/libf2c.a
+#	/usr/lib/libf2c.a
 	${QWT_LIB}
 	)
 
+add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H})	
+#set_target_properties(${PROJECT}  PROPERTIES COMPILE_DEFINITIONS "${DEFFINITIONS}")
+add_dependencies (${PROJECT} Core GUI Util)	
 #message( STATUS "\n\n!LINK = ${LINK}")
 
-target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES})
+target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} /usr/lib/libf2c.a)
 
 set (DEFFINITIONS
+	#CMAKE_C_COMPILER="/usr/bin/g++" 
+	#CMAKE_CXX_COMPILER="g++"
+	_REENTRANT
 	QT_SHARED
 	)
+	
+add_definitions( -c )	
+add_definitions( -m64 )	
+add_definitions( -pipe )	
+add_definitions( -g )	
+add_definitions( -Wall )	
+add_definitions( -W)	
+
 set_target_properties(${PROJECT}  PROPERTIES COMPILE_DEFINITIONS "${DEFFINITIONS}")
 
 #enable_testing ()
@@ -89,21 +106,9 @@ message( STATUS "Building ${PROJECT} finished\n")
 
 #ADD_DEFINITIONS( -Wall )
 # INCLUDE( ${QT_USE_FILE} )
-
+#-c -m64 -pipe -g -Wall -W -D_REENTRANT -DQT_SCRIPT_LIB -DQT_XML_LIB -DQT_GUI_LIB -DQT_CORE_LIB -DQT_SHARED
 
 #SET(QT_USE_QTOPENGL TRUE)
 
 #The most commonly used modules are controlled using the following variables.
-
-   # * QT_USE_QTNETWORK
-    #* QT_USE_QTOPENGL
-    #* QT_USE_QTSQL
-    #* QT_USE_QTXML
-    #* QT_USE_QTSVG
-   # * QT_USE_QTTEST
-   # * QT_USE_QTDBUS
-    #* QT_USE_QTSCRIPT
-   # * QT_USE_QTWEBKIT
-   # * QT_USE_QTXMLPATTERNS
-   # * QT_USE_PHONON
 

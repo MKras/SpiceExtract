@@ -45,14 +45,13 @@ void ExtrThread::run(){
 void ExtrThread::kill(){
 
     cansel=true;
-        spe->kill();        
+        spe->kill();
             emit finished();
             emit closing();
             Null=true;
 }
 
 void ExtrThread::kill_it(){
-
     kill();
 }
 

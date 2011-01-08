@@ -2,7 +2,7 @@
 #define EXTRTHREAD_H
 #include <qthread.h>
 #include <QPushButton>
- #include <QRunnable>
+#include <QRunnable>
 #include <QThread>
 #include <QMutex>
 #include "globals.h"
