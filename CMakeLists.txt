@@ -10,9 +10,9 @@ project (${PROJECT})
 
 message( STATUS "\nBuilding ${PROJECT} started")
 
-file(GLOB ${PROJECT}_SOURCES *.cpp ) 
-file(GLOB ${PROJECT}_HEADERS *.h *.hpp )
-file(GLOB ${PROJECT}_UI *.ui)
+file(GLOB ${PROJECT}_SOURCES *.cpp  util/*.cpp core/*.cpp gui/*.cpp)  
+file(GLOB ${PROJECT}_HEADERS *.h *.hpp util/*.h core/*.h gui/*.h)
+file(GLOB ${PROJECT}_UI *.ui util/*.ui gui/*.ui)
 file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS} )
 
 #### QWT  #####################################
@@ -50,20 +50,32 @@ set (INCLUDES
 include_directories(
 	${INCLUDES}	
 	)
-QT4_WRAP_UI(${PROJECT}_UIS_H ${${PROJECT}_UI})
+	
+set (RESOURCE_PATH 
+	${CMAKE_SOURCE_DIR}/gui
+	)
+	#${BUILD_ROOT}/gui)
+ 
+set (RESOURCES 
+	${RESOURCE_PATH}/textedit.qrc)
 
+
+qt4_add_resources (${PROJECT}_RESOURCES  ${RESOURCES})
+qt4_wrap_UI(${PROJECT}_UIS_H ${${PROJECT}_UI})
 qt4_wrap_cpp (${PROJECT}_MOC_SOURCES ${${PROJECT}_HEADERS})
 
-add_subdirectory(core)
-add_subdirectory(gui)
-add_subdirectory(util)
+#add_subdirectory(util)
+#add_subdirectory(core)
+#add_subdirectory(gui)
+
 
 #add_dependencies (${PROJECT} Core GUI Util)
+find_file(LIBF2C libf2c.a PATHS /usr/lib/)
 
 set(LINK 
-	Core
-	GUI
-	Util
+	#Core
+	#Util	
+	#GUI
 	lapack
 	gslcblas 
 	gsl
@@ -72,16 +84,16 @@ set(LINK
 	ga
 	newmat
 	opt
-#	/usr/lib/libf2c.a
+	#/usr/lib/libf2c.a
 	${QWT_LIB}
 	)
 
-add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H})	
+add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H} ${${PROJECT}_RESOURCES})	
 #set_target_properties(${PROJECT}  PROPERTIES COMPILE_DEFINITIONS "${DEFFINITIONS}")
-add_dependencies (${PROJECT} Core GUI Util)	
+#add_dependencies (${PROJECT} Core GUI Util)	
 #message( STATUS "\n\n!LINK = ${LINK}")
 
-target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} /usr/lib/libf2c.a)
+target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} ${LIBF2C})
 
 set (DEFFINITIONS
 	#CMAKE_C_COMPILER="/usr/bin/g++" 
