@@ -4,15 +4,19 @@ set (PROJECT SpiceExtract)
 
 project (${PROJECT})
 
-#set (CMAKE_C_LINK_SHARED:STRING g++)
-#set (CMAKE_C_COMPILER g++)
-#set (CMAKE_CXX_COMPILER  g++)
-
 message( STATUS "\nBuilding ${PROJECT} started")
 
-file(GLOB ${PROJECT}_SOURCES *.cpp  util/*.cpp core/*.cpp gui/*.cpp)  
-file(GLOB ${PROJECT}_HEADERS *.h *.hpp util/*.h core/*.h gui/*.h)
-file(GLOB ${PROJECT}_UI *.ui util/*.ui gui/*.ui)
+file(GLOB ${PROJECT}_SOURCES *.cpp  
+	util/*.cpp 
+	core/*.cpp 
+	gui/*.cpp)  
+file(GLOB ${PROJECT}_HEADERS *.h *.hpp 
+	util/*.h 
+	core/*.h 
+	gui/*.h)
+file(GLOB ${PROJECT}_UI *.ui 
+	util/*.ui 
+	gui/*.ui)
 file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS} )
 
 #### QWT  #####################################
@@ -54,7 +58,6 @@ include_directories(
 set (RESOURCE_PATH 
 	${CMAKE_SOURCE_DIR}/gui
 	)
-	#${BUILD_ROOT}/gui)
  
 set (RESOURCES 
 	${RESOURCE_PATH}/textedit.qrc)
