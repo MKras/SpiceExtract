@@ -98,12 +98,15 @@ set(LINK
 	${QWT_LIB}
 	)
 if(WITH_LEVMAR)
+    add_definitions( -DWITH_LEVMAR)
     list (APPEND LINK levmar)
 endif(WITH_LEVMAR)
 if(WITH_GALIB)
+    add_definitions( -DWITH_GALIB )
     list (APPEND LINK ga)
 endif(WITH_LEVMAR)
 if(WITH_OPTPP)
+    add_definitions( -DWITH_OPTPP )
     list (APPEND LINK newton newmat opt)
 endif(WITH_OPTPP)
 

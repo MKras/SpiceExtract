@@ -27,32 +27,32 @@
   <SpiceInput>atlas/mos1/spiceinput.txt</SpiceInput>
   <SpiceParam Name="u0">
    <MinVal>500</MinVal>
-   <InitVal>7.03881e+02</InitVal>
+   <InitVal>5.97714e+02</InitVal>
    <MaxVal>1500</MaxVal>
   </SpiceParam>
   <SpiceParam Name="ua">
    <MinVal>5.29603e-11</MinVal>
-   <InitVal>4.70735e-10</InitVal>
+   <InitVal>4.62244e-10</InitVal>
    <MaxVal>9.29603e-10</MaxVal>
   </SpiceParam>
   <SpiceParam Name="ub">
    <MinVal>6.50578e-20</MinVal>
-   <InitVal>6.50582e-20</InitVal>
+   <InitVal>6.50693e-20</InitVal>
    <MaxVal>8.50578e-18</MaxVal>
   </SpiceParam>
   <SpiceParam Name="uc">
    <MinVal>1.63215e-11</MinVal>
-   <InitVal>1.63215e-11</InitVal>
+   <InitVal>1.65609e-11</InitVal>
    <MaxVal>4.63215e-9</MaxVal>
   </SpiceParam>
   <SpiceParam Name="nch">
    <MinVal>3.11481e+16</MinVal>
-   <InitVal>9.74716e+16</InitVal>
+   <InitVal>7.52409e+17</InitVal>
    <MaxVal>8.11481e+17</MaxVal>
   </SpiceParam>
   <SpiceParam Name="nsub">
    <MinVal>5.64942e+16</MinVal>
-   <InitVal>5.71512e+16</InitVal>
+   <InitVal>9.64941e+17</InitVal>
    <MaxVal>9.64942e+17</MaxVal>
   </SpiceParam>
   <SpiceParam Name="eta0">
@@ -82,19 +82,19 @@
   </SpiceParam>
   <SpiceParam Name="xt">
    <MinVal>1e-9</MinVal>
-   <InitVal>3.43767e-07</InitVal>
+   <InitVal>3.87786e-08</InitVal>
    <MaxVal>1e-6</MaxVal>
   </SpiceParam>
   <SpiceParam Name="tox">
    <MinVal>1.4667e-09</MinVal>
-   <InitVal>4.56626e-09</InitVal>
+   <InitVal>3.00568e-09</InitVal>
    <MaxVal>1.4667e-08</MaxVal>
   </SpiceParam>
  </Config>
  <DUT>
   <device name="large">
    <curve name="ivg_1">
-    <Alg>Evaluate</Alg>
+    <Alg>My DirectSearch</Alg>
     <OutParse>{1};{2}</OutParse>
     <ErrorFunction>2</ErrorFunction>
     <file num="1">
@@ -108,7 +108,9 @@
     <SpiceName>tox</SpiceName>
    </curve>
    <curve name="ivg">
-    <Alg>OptBCQNewton</Alg>
+    <Alg>My DirectSearch</Alg>
+    <OutParse>{1};{2}</OutParse>
+    <ErrorFunction>2</ErrorFunction>
     <file num="1">
      <Cir>atlas/mos1/idvg/idsvgs.cir</Cir>
      <Out>atlas/mos1/idvg/idsvgs.out</Out>

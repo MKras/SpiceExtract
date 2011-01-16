@@ -1,7 +1,7 @@
 
 Circuit: mos output characteristics
 
-Warning -- Version not specified on line "level=8 xj=9.97812e-08 tox=4.56626e-09 nch=9.74716e+16 nsub=5.71512e+16 xt=3.43767e-07 u0=501.186 ua=3.87808e-10 ub=3.651e-19 uc=1.8702e-10 vsat=294214 a0=1.09951 nfactor=1.40292 eta0=0.0819811 dsub=0.76455 drout=1.14652 pscbe1=7.08085e+09 pscbe2=3.82028e-06"
+Warning -- Version not specified on line "level=8 xj=9.97812e-08 tox=3.00568e-09 nch=7.52409e+17 nsub=9.64941e+17 xt=3.87786e-08 u0=597.714 ua=4.62244e-10 ub=6.50693e-20 uc=1.65609e-11 vsat=294214 a0=1.09951 nfactor=1.40292 eta0=0.0819811 dsub=0.76455 drout=1.14652 pscbe1=7.08085e+09 pscbe2=3.82028e-06"
 Setting version to 'default'.
 Doing analysis at TEMP = 27.000000 and TNOM = 27.000000
 
@@ -10,40 +10,40 @@ Warning: Ps = 0 is less than W.
 
 No. of Data Rows : 21
                            mos output characteristics
-                           DC transfer characteristic  Sun Jan 16 23:15:03  2011
+                           DC transfer characteristic  Sun Jan 16 23:28:48  2011
 --------------------------------------------------------------------------------
 Index   v-sweep         vcc#branch      
 --------------------------------------------------------------------------------
-0	0.000000e+00	2.223340e-14	
-1	1.000000e-01	4.671637e-14	
-2	2.000000e-01	5.044669e-12	
-3	3.000000e-01	1.244138e-10	
-4	4.000000e-01	2.580038e-09	
-5	5.000000e-01	3.126608e-08	
-6	6.000000e-01	1.391524e-07	
-7	7.000000e-01	2.865164e-07	
-8	8.000000e-01	4.301810e-07	
-9	9.000000e-01	5.673090e-07	
-10	1.000000e+00	7.000332e-07	
-11	1.100000e+00	8.292391e-07	
-12	1.200000e+00	9.551586e-07	
-13	1.300000e+00	1.077837e-06	
-14	1.400000e+00	1.197283e-06	
-15	1.500000e+00	1.313503e-06	
-16	1.600000e+00	1.426511e-06	
-17	1.700000e+00	1.536327e-06	
-18	1.800000e+00	1.642977e-06	
-19	1.900000e+00	1.746492e-06	
-20	2.000000e+00	1.846907e-06	
+0	0.000000e+00	8.277713e-14	
+1	1.000000e-01	1.283273e-12	
+2	2.000000e-01	2.337744e-11	
+3	3.000000e-01	4.095528e-10	
+4	4.000000e-01	6.022681e-09	
+5	5.000000e-01	5.571379e-08	
+6	6.000000e-01	2.268653e-07	
+7	7.000000e-01	4.703603e-07	
+8	8.000000e-01	7.141329e-07	
+9	9.000000e-01	9.464712e-07	
+10	1.000000e+00	1.169867e-06	
+11	1.100000e+00	1.386225e-06	
+12	1.200000e+00	1.596340e-06	
+13	1.300000e+00	1.800553e-06	
+14	1.400000e+00	1.999066e-06	
+15	1.500000e+00	2.192039e-06	
+16	1.600000e+00	2.379625e-06	
+17	1.700000e+00	2.561973e-06	
+18	1.800000e+00	2.739227e-06	
+19	1.900000e+00	2.911531e-06	
+20	2.000000e+00	3.079024e-06	
 
-CPU time since last call: 0.007 seconds.
+CPU time since last call: 0.005 seconds.
 
-Total CPU time: 0.007 seconds.
+Total CPU time: 0.005 seconds.
 
 Total DRAM available = 1374.773438 MB.
-DRAM currently available = 187.457031 MB.
+DRAM currently available = 194.503906 MB.
 Total ngspice program size = 15.959961 MB.
-Resident set size = 721.000 kB.
+Resident set size = 722.000 kB.
 Shared ngspice pages = 553.000 kB.
 Text (code) pages = 1.800781 MB.
 Stack = 0 bytes.

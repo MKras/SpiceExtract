@@ -5,7 +5,6 @@ cd build
 export BUILD_ROOT=`pwd`
 #echo $BUILD_ROOT
 cmake CMakeLists.txt -G "Unix Makefiles" ../ 
-#cmake CMakeLists.txt ../
 make
 cd ..
 #pause
