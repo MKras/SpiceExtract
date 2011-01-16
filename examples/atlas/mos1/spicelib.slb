@@ -1,0 +1,25 @@
+.model atlas NMOS 
++ LEVEL=8 
+
++ xj=9.97812e-08 
+* ivg_1
++ tox = 4.56626e-09
++ nch = 9.74716e+16
++ nsub = 5.71512e+16
++ xt = 3.43767e-07
+* ivg
++ u0 = 501.186
++ ua = 3.87808e-10
++ ub = 3.651e-19
++ uc = 1.8702e-10
+* ivd
++ vsat = 294214
++ a0=1.09951
++ nfactor=1.40292
+**BIBL
++ eta0 = 0.0819811
++ dsub = 0.76455
++ drout = 1.14652
+**SCBE region bsim3 man chap 2 fig 2-6
++ pscbe1 = 7.08085e+09
++ pscbe2 = 3.82028e-06

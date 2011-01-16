@@ -61,6 +61,7 @@ register int i, j;
 }
 */
 
+#ifdef WITH_GALIB
 float gaBin2Dec_opt_f(GAGenome & c){
         GABin2DecGenome & genome = (GABin2DecGenome &)c;
           double fx;
@@ -142,7 +143,7 @@ void gaBin2DecF(int dim, double* lower, double* upper,
 
     }
 }
-
+#endif
 void del(){
 
     sp->deleteLater();
@@ -174,7 +175,9 @@ int core (curve *cur, SpiceExtr *spe){
         qDebug()<<"ALG = "<<QString::fromStdString(cur->AlgOpt)<<"\n";
     }
 
+#ifdef WITH_OPTPP
     ColumnVector lower_cv(dim),upper_cv(dim), val_cv(dim), resultvector_cv(dim);// resultvector - вектор в котором будем хранить результаты оптимизации (иксы)
+#endif
     double lower[dim],upper[dim], val[dim], resultvector[dim];// resultvector - вектор в котором будем хранить результаты оптимизации (иксы)
 
     /*
@@ -207,7 +210,9 @@ int core (curve *cur, SpiceExtr *spe){
         //return 0;
     }    
 
+
     if((cur->AlgOpt=="OptBCQNewton")|(cur->AlgOpt=="OptCG")|(cur->AlgOpt=="OptFDNIPS")|(cur->AlgOpt=="OptPDS")){
+#ifdef WITH_OPTPP
         //трансформируем данные
         for(i=0;i<dim; i++){
             lower[i]=-1;
@@ -336,7 +341,11 @@ int core (curve *cur, SpiceExtr *spe){
             getXc[i]=getXc_t(i+1);
         };
         sp->get_real_val(getXc, resultvector);
+#else
+    qDebug()<<"OPT++ Linbary Disabled. Rebuild using WITH_OPTPP deffinition!\n";
+#endif
     }
+
     if((cur->AlgOpt=="My DirectSearch")|(cur->AlgOpt=="My PG")){
 
         double *mx;
@@ -350,9 +359,9 @@ int core (curve *cur, SpiceExtr *spe){
         grad = new double[dim];
         dx = new double[dim];
 
-        double alpha=1e-6;
+        //double alpha=1e-6;
         double scale=1.21;
-        double gradstep;
+        //double gradstep;
         double tol=sp->getFTol();
 
 
@@ -430,8 +439,10 @@ int core (curve *cur, SpiceExtr *spe){
             resultvector[i]=x[i];
         }
 
-    }    
+    }
+
     if(cur->AlgOpt=="GA"){
+#ifdef WITH_GALIB
         qDebug()<<"GA\n";
         for(i=0;i<dim; i++){
             lower[i]=sp->getLower(i);
@@ -441,11 +452,14 @@ int core (curve *cur, SpiceExtr *spe){
         };
         gaBin2DecF(dim, lower, upper, sp->getPopSize(), sp->getNGen(), sp->getPMut(), sp->getPCross(), sp->getGABin(), resultvector);
         cout<<"GA Finished"<<endl;
+#else
+    qDebug()<<"Genetic Algorithms (GALib) Disabled. Rebuild using WITH_GALIB deffinition!\n";
+#endif
     }
-
     /////////////////////////////////////////////////////
-#ifdef WITH_LM
+
     if(cur->AlgOpt=="LevMar"){ //LevMar
+#ifdef WITH_LEVMAR
         qDebug()<<"LevMar\n";
 #define LM_DBL_PREC
             double info[LM_INFO_SZ];
@@ -610,12 +624,13 @@ int core (curve *cur, SpiceExtr *spe){
           }
           //sp->get_real_val(res,resultvector);
           //resultvector=res;
+#else
+    qDebug()<<"LevMar Disabled. Rebuild using WITH_LEVMAR deffinition!\n";
+#endif
     };
     /////////////////////////////////////////////////////
     /////////////////////////////////////////////////////
-#else
-    qDebug()<<"LevMar Disabled. Rebuild using WITH_LM deffinition!\n";
-#endif
+
 
     //Выводим результаты расчетов
     //Окончательный расчет с оптимальными значениями параметров
@@ -1215,6 +1230,9 @@ void OptppInit(int n, double* x){
 sp->OptppInit(n,x);
 };
 
+
+#ifdef WITH_OPTPP
+
 void OptppInit_cv(int n, ColumnVector& x_cv){
     double x[n];
     int i;
@@ -1226,30 +1244,6 @@ sp->OptppInit(n,x);
         x_cv(i+1)=x[i];
     }
 };
-
-/*void OptppInit(int n, ColumnVector& tx){
-    double x[n];
-    for(int i=0; i<n;i++){
-        x[i]=tx(i+1);
-    }
-sp->OptppInit(n,x);
-
-};*/
-
-void OptppInit_conv(int n, double* x){
-        cout<<"OptppInit_conv Start"<<endl;
-        double res[n];
-        sp->OptppInit(n,res);
-        cout<<"sp->OptppInit(n,res);"<<endl;
-        sp->get_trans_val(res,x);
-
-        for(int i=0; i<n; i++){
-                cout<<" xinit = "<<res[i]<<" x_сonv = "<<x[i]<<endl;
-        }
-        cout<<"OptppInit_conv Finish"<<endl;
-};
-
-
 void OptppInit_conv_cv(int n, ColumnVector& x_cv){
     cout<<"OptppInit_conv_cv Start"<<endl;
     double res[n];
@@ -1264,8 +1258,56 @@ void OptppInit_conv_cv(int n, ColumnVector& x_cv){
     cout<<"OptppInit_conv_cv Finish"<<endl;
 };
 
+void OptppFeval_conv_cv (int dim, const ColumnVector& tx, double& fx, int& result){
+//sp->OptppFeval(dim, x,fx,result);
+    double x[dim];
+    for(int i=0;i<dim;i++){
+        x[i]=tx(i+1);
+    }
+sp->OptppFeval_conv(dim, x,fx,result);
+//sp->OptppFeval(dim, tmp,fx,result);
+
+};
+
+/*void OptppInit(int n, ColumnVector& tx){
+    double x[n];
+    for(int i=0; i<n;i++){
+        x[i]=tx(i+1);
+    }
+sp->OptppInit(n,x);
+
+};*/
+
+void OptppFeval_conv_shtraf_cv(int dim, const ColumnVector& x, double& fx, int& result){
+        //sp->OptppFeval(dim, x,fx,result);
+        cout<<"\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Shtraf Start"<<endl;
+        OptppFeval_conv_cv(dim, x,fx,result);
+        double shtraf=0, tmp=0;
+        double tmpx;
+        //bool shtraff=false;
+
+        for(int i=1;i<=dim;i++){
+                tmpx=x(i);
+                cout<<"x("<<i<<")= "<<x(i)<<endl;
+                //tmp=pow(abs(1-abs(tmpx)),100);
+                tmp=pow(abs(tmpx),100);
+                        shtraf=shtraf+tmp;
+                        cout<<" Shtraf_["<<i<<"] = "<<shtraf<<" tmpshtraf = "<<tmp<<" tmpx = "<<tmpx<<endl;
+          };
+        cout<<"FX = "<<fx<<" SHTRAF = "<<shtraf<<endl;
+
+        fx=fx+shtraf;
+        cout<<"RES = "<<fx<<endl;
+        cout<<"Shtraf End"<<endl;
+};
+
+#endif
 
 
+
+
+
+#ifdef WITH_LEVMAR
 void LevMarEvalF(double *p, double *x, int m, int n, void *data){
         //ColumnVector cvp(m);
         vector <double> vx(n);
@@ -1285,6 +1327,20 @@ void LevMarEvalQ(double *p, double *x, int m, int n, void *data){
                 x[i]=p[0]*i*i+p[1];
         }
 }
+#endif
+
+void OptppInit_conv(int n, double* x){
+        cout<<"OptppInit_conv Start"<<endl;
+        double res[n];
+        sp->OptppInit(n,res);
+        cout<<"sp->OptppInit(n,res);"<<endl;
+        sp->get_trans_val(res,x);
+
+        for(int i=0; i<n; i++){
+                cout<<" xinit = "<<res[i]<<" x_сonv = "<<x[i]<<endl;
+        }
+        cout<<"OptppInit_conv Finish"<<endl;
+};
 
 void OptppFeval_conv (int dim, double* x, double& fx, int& result){
 //sp->OptppFeval(dim, x,fx,result);
@@ -1292,16 +1348,7 @@ sp->OptppFeval_conv(dim, x,fx,result);
 //sp->OptppFeval(dim, tmp,fx,result);
 
 };
-void OptppFeval_conv_cv (int dim, const ColumnVector& tx, double& fx, int& result){
-//sp->OptppFeval(dim, x,fx,result);
-    double x[dim];
-    for(int i=0;i<dim;i++){
-        x[i]=tx(i+1);
-    }
-sp->OptppFeval_conv(dim, x,fx,result);
-//sp->OptppFeval(dim, tmp,fx,result);
 
-};
 
 void OptppFeval_conv_shtraf(int dim, double* x, double& fx, int& result){
         //sp->OptppFeval(dim, x,fx,result);
@@ -1326,28 +1373,7 @@ void OptppFeval_conv_shtraf(int dim, double* x, double& fx, int& result){
         cout<<"Shtraf End"<<endl;
         };
 
-void OptppFeval_conv_shtraf_cv(int dim, const ColumnVector& x, double& fx, int& result){
-        //sp->OptppFeval(dim, x,fx,result);
-        cout<<"\n\n!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!Shtraf Start"<<endl;
-        OptppFeval_conv_cv(dim, x,fx,result);
-        double shtraf=0, tmp=0;
-        double tmpx;
-        //bool shtraff=false;
 
-        for(int i=1;i<=dim;i++){
-                tmpx=x(i);
-                cout<<"x("<<i<<")= "<<x(i)<<endl;
-                //tmp=pow(abs(1-abs(tmpx)),100);
-                tmp=pow(abs(tmpx),100);
-                        shtraf=shtraf+tmp;
-                        cout<<" Shtraf_["<<i<<"] = "<<shtraf<<" tmpshtraf = "<<tmp<<" tmpx = "<<tmpx<<endl;
-          };
-        cout<<"FX = "<<fx<<" SHTRAF = "<<shtraf<<endl;
-
-        fx=fx+shtraf;
-        cout<<"RES = "<<fx<<endl;
-        cout<<"Shtraf End"<<endl;
-};
 
 
 void OptppFeval (int dim, double* x, double& fx, int& result){

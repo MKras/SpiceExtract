@@ -6,6 +6,12 @@ project (${PROJECT})
 
 message( STATUS "\nBuilding ${PROJECT} started")
 
+
+option (WITH_LEVMAR "Use LevMar library" OFF)
+option (WITH_GALIB "Use GALib library" OFF)
+option (WITH_OPTPP "Use OPT++ library" OFF)
+
+
 file(GLOB ${PROJECT}_SOURCES *.cpp  
 	util/*.cpp 
 	core/*.cpp 
@@ -82,14 +88,25 @@ set(LINK
 	lapack
 	gslcblas 
 	gsl
-	levmar
-	newton
-	ga
-	newmat
-	opt
+        #levmar
+
+        #ga
+        #newton
+        #newmat
+        #opt
 	#/usr/lib/libf2c.a
 	${QWT_LIB}
 	)
+if(WITH_LEVMAR)
+    list (APPEND LINK levmar)
+endif(WITH_LEVMAR)
+if(WITH_GALIB)
+    list (APPEND LINK ga)
+endif(WITH_LEVMAR)
+if(WITH_OPTPP)
+    list (APPEND LINK newton newmat opt)
+endif(WITH_OPTPP)
+
 
 add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H} ${${PROJECT}_RESOURCES})	
 #set_target_properties(${PROJECT}  PROPERTIES COMPILE_DEFINITIONS "${DEFFINITIONS}")

@@ -6,9 +6,10 @@
 //#include "gui/texteditor.h"
 //#include "editorthread.h"
 
+#ifdef WITH_OPTPP
 using NEWMAT::ColumnVector;
 using namespace OPTPP;
-
+#endif
 
 //ExtrThread::ExtrThread(curve *c, string p, QPushButton *b): QRunnable()
 ExtrThread::ExtrThread(curve &c): QThread()

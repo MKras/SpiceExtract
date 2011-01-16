@@ -24,6 +24,8 @@
 #include "../util/globals.h"
 #include <QProcess>
 #include <QTextStream>
+
+#ifdef WITH_OPTPP
 //////OPTPP/////////////
 //
 #include <OptNIPS.h>
@@ -52,9 +54,11 @@
 #include <CompoundConstraint.h>
 //////////////////////////
 
-
 using NEWMAT::ColumnVector;
 using namespace OPTPP;
+#endif
+
+
 
 using namespace std;
 //class SpiceExtr: public QProcess {

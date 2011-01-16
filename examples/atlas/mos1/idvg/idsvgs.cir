@@ -1,0 +1,16 @@
+MOS OUTPUT CHARACTERISTICS
+
+VCC 1 0 DC -0.01V
+VG 2 0 DC 0.5V
+VB 3 0 0.0V
+VD 4 0 0.0V
+
+*  D G S B
+M1 4 2 1 3 atlas L=1U W=0.43U 
+*L=1U W=0.4U 
+
+.include spicelib.slb
+
+.DC VG 0 5 .2 
+.PRINT DC I(VCC)
+.END
