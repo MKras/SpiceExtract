@@ -544,11 +544,11 @@ void SpiceExtr::setSpiceInputValues(string sl){
                               out_stream<<line<<"\n";
                 }            
             }else{
-                qDebug()<<"setSpiceInputValues NewFil Error\n";
+                qDebug()<<"setSpiceInputValues NewFile Error\n";
                 exit(0);
             }
         }else{
-            qDebug()<<"setSpiceInputValues OldFil Error\n";
+            qDebug()<<"setSpiceInputValues OldFile Error\n";
             exit(0);            
         }
         old_f.close();

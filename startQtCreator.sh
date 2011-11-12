@@ -1,3 +1,17 @@
 #!/bin/sh
-export BUILD_ROOT=/home/work/workspace/QT/SpiceExtract/../qtcreator-build
-qtcreator CMakeLists.txt&
+pwd_path=`pwd`
+
+DIRECTORY=SpiceExtract-build-desktop
+
+export BUILD_ROOT=$pwd_path/../$DIRECTORY
+
+echo "BUILD_ROOT = $BUILD_ROOT"
+
+if [ -d "$BUILD_ROOT" ]; then
+
+  qtcreator CMakeLists.txt&
+
+else 
+  mkdir $BUILD_ROOT
+  qtcreator CMakeLists.txt&
+fi

@@ -29,7 +29,7 @@ public:
 
     void addPlot(QVector<QPointF> *dataExp,  QVector<QPointF> *dataSim,
                  bool renderAntialiased = false,
-                 QString captionExp = NULL,  QString captionSim = NULL,
+                 QString captionExp = "",  QString captionSim = "",
                  QColor colorExp = Qt::blue, QColor colorSim = Qt::red);
     bool openOutFile(QString *fileName, QVector<QPointF> *dataForWrite);
     void erase();
