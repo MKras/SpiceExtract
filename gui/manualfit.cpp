@@ -7,7 +7,7 @@
 #include <QLabel>
 #include <QDebug>
 
-#include <qwt_scale_engine.h>
+#include <qwt/qwt_scale_engine.h>
 #include "QScienceSpinBox.h"
 #include "util/extrthread.h"
 

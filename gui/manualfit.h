@@ -4,7 +4,7 @@
 #include "util/globals.h"
 #include <QWidget>
 #include <QHBoxLayout>
-#include <qwt_slider.h>
+#include <qwt/qwt_slider.h>
 #include <QLabel>
 
 
