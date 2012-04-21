@@ -74,7 +74,7 @@ qt4_wrap_UI(${PROJECT}_UIS_H ${${PROJECT}_UI})
 qt4_wrap_cpp (${PROJECT}_MOC_SOURCES ${${PROJECT}_HEADERS})
 
 
-find_file(LIBF2C libf2c.a PATHS /usr/lib/)
+find_file(LIBF2C libf2c.a PATHS /usr/lib/ /usr/lib64/ /usr/local/lib/ /usr/local/lib64/)
 
 set(LINK 	
 	lapack
