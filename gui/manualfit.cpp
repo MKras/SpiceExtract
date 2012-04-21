@@ -10,6 +10,7 @@
 #include <qwt/qwt_scale_engine.h>
 #include "QScienceSpinBox.h"
 #include "util/extrthread.h"
+#include <cmath>
 
 
 
@@ -60,7 +61,7 @@ QHBoxLayout* ManualFit::createOne(curve *cur, int i){
                                       QwtSlider::autoScale(200,
                                                            QString("%1").arg(QString::fromStdString(cur->spiceMin.at(i))).toDouble(),
                                                            QString("%1").arg(QString::fromStdString(cur->spiceMax.at(i))).toDouble(),
-                                                           abs(QString("%1").arg(QString::fromStdString(cur->spiceMax.at(i))).toDouble()
+                                                           fabs(QString("%1").arg(QString::fromStdString(cur->spiceMax.at(i))).toDouble()
                                                                                      -QString("%1").arg(QString::fromStdString(cur->spiceMin.at(i))).toDouble()))/1e-4
                                                            ), QwtSlider::BgTrough);*/
 
@@ -70,14 +71,14 @@ QHBoxLayout* ManualFit::createOne(curve *cur, int i){
 
     slider->setRange(QString("%1").arg(QString::fromStdString(cur->spiceMin.at(i))).toDouble(),
                      QString("%1").arg(QString::fromStdString(cur->spiceMax.at(i))).toDouble(),
-                     abs(QString("%1").arg(QString::fromStdString(cur->spiceMin.at(i))).toDouble())*1e-8,
+                     fabs(QString("%1").arg(QString::fromStdString(cur->spiceMin.at(i))).toDouble())*1e-8,
                      100);
 
     slider->setScale(QString("%1").arg(QString::fromStdString(cur->spiceMin.at(i))).toDouble(),
                      QString("%1").arg(QString::fromStdString(cur->spiceMax.at(i))).toDouble(),
                      //QString("%1").arg(QString::fromStdString(cur->spiceMin.at(i))).toDouble()*1e-8
                      //TRUE
-                     (abs(QString("%1").arg(QString::fromStdString(cur->spiceMax.at(i))).toDouble()
+                     (fabs(QString("%1").arg(QString::fromStdString(cur->spiceMax.at(i))).toDouble()
                           -QString("%1").arg(QString::fromStdString(cur->spiceMin.at(i))).toDouble()))/1e-4
                      );
     //slider->setAutoScale();
@@ -88,7 +89,7 @@ QHBoxLayout* ManualFit::createOne(curve *cur, int i){
     QScienceSpinBox *spinBox = new QScienceSpinBox;
     spinBox->setRange(QString("%1").arg(QString::fromStdString(cur->spiceMin.at(i))).toDouble(),
                       QString("%1").arg(QString::fromStdString(cur->spiceMax.at(i))).toDouble());
-    //spinBox->setValue(abs(QString("%1").arg(QString::fromStdString(cur->spiceInit.at(i))).toDouble()));
+    //spinBox->setValue(fabs(QString("%1").arg(QString::fromStdString(cur->spiceInit.at(i))).toDouble()));
     spinBox->setValue(QString("%1").arg(QString::fromStdString(cur->spiceInit.at(i))).toDouble());
 
 

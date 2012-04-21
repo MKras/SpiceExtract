@@ -414,7 +414,7 @@ int core (curve *cur, SpiceExtr *spe){
         cout<<"Fxinit = "<<fx<<endl;
         for(int i=0;i<dim;i++){
             init=x[i];
-            x[i]=x[i]+((abs(sp->getUpper(i)-sp->getLower(i)))*0.01);
+            x[i]=x[i]+((fabs(sp->getUpper(i)-sp->getLower(i)))*0.01);
             OptppFeval( dim, x, fx, result);
             y[i]=fx;
             x[i]=init;
@@ -428,9 +428,9 @@ int core (curve *cur, SpiceExtr *spe){
             cout<<sp->getName(i)<<" = ";
             if (yinit==0){
                 cout<< "yunit = 0! changed to y(i) only: ";
-                cout<<x[i]<<"\t\tFxnew = "<<y[i]<<"\t\tDelta = "<<(abs(y[i]))<<"\%"<<endl;
+                cout<<x[i]<<"\t\tFxnew = "<<y[i]<<"\t\tDelta = "<<(fabs(y[i]))<<"\%"<<endl;
             }else{
-                cout<<x[i]<<"\t\tFxnew = "<<y[i]<<"\t\tDelta = "<<(abs(yinit-y[i])/yinit)*100<<"\%"<<endl;
+                cout<<x[i]<<"\t\tFxnew = "<<y[i]<<"\t\tDelta = "<<(fabs(yinit-y[i])/yinit)*100<<"\%"<<endl;
             }
         };
 
@@ -676,7 +676,7 @@ void goldPDS(void(*func)(int n, double *a, double &fx), int n, double *xarr, dou
 
         cout<<"\nf1("<<x1<<") = "<<f1<<" f2("<<x2<<") = "<<f2<<" finit("<<tval<<") = "<<finit<<endl<<endl;
 
-        while((abs(x2-x1)>=xtol)){
+        while((fabs(x2-x1)>=xtol)){
                 r=r*g;
                 cout<<" r = "<<r<<" ";
                 if(f1<f2){
@@ -697,7 +697,7 @@ void goldPDS(void(*func)(int n, double *a, double &fx), int n, double *xarr, dou
                         tf=f2;
                 }
         }
-        cout<<"xinit = "<<tval<<" Gold xTol = "<<xtol<<" abs(x2-x1) = "<<x2<<" - "<<x1<<" = "<<abs(x2-x1)<<endl;
+        cout<<"xinit = "<<tval<<" Gold xTol = "<<xtol<<" fabs(x2-x1) = "<<x2<<" - "<<x1<<" = "<<fabs(x2-x1)<<endl;
 }
 
 void DirectSearch(void(*func)(int n, double *a, double &fx), int dim, double *x, double *lb, double *ub, double tol ){
@@ -715,17 +715,17 @@ void DirectSearch(void(*func)(int n, double *a, double &fx), int dim, double *x,
                         cout<<" I = "<<i<<endl;
                         tx=x[i];
                         goldPDS(func, i, x, lb, ub);
-                        if(abs(tx-x[i])<=tol) z++;
-                        cout<<"PDS TOL = "<<tol<<" abs(tx-x[i]) = "<<tx<<" - "<<x[i]<<" = "<<abs(tx-x[i])<<endl;
+                        if(fabs(tx-x[i])<=tol) z++;
+                        cout<<"PDS TOL = "<<tol<<" fabs(tx-x[i]) = "<<tx<<" - "<<x[i]<<" = "<<fabs(tx-x[i])<<endl;
 
                 }
 
                 func(dim,x,f2);
                 if(z==dim-1) {
-                        //cout<<"abs(tx-x[i])<=tol is TRUE for all parameters\n";
+                        //cout<<"fabs(tx-x[i])<=tol is TRUE for all parameters\n";
                         exit=true;
                 }
-                if(abs(f2-f1)<tol) {
+                if(fabs(f2-f1)<tol) {
                         cout<<"Stop Criterie: f1 = "<<f1<<" f2 = "<<f2<<endl;
                         exit=true;
                 }
@@ -847,12 +847,12 @@ while (fin!=1){
         //y=z;
         //x0=x;
 
-        if((abs(y0-y)<tol)or(y0<y)){
+        if((fabs(y0-y)<tol)or(y0<y)){
                 fin=1;
-                cout<<"abs(y0-y) ="<<abs(y0-y)<<" = "<<abs(y0)<<" - "<<abs(y)<<" tol\n";
+                cout<<"fabs(y0-y) ="<<fabs(y0-y)<<" = "<<fabs(y0)<<" - "<<fabs(y)<<" tol\n";
                 cout<<"TOL = "<<tol<<endl;
         }else{
-                cout<<"abs(y0-y) = "<<abs(y0-y)<<" = "<<abs(y0)<<" - "<<abs(y)<<" >tol\n";
+                cout<<"fabs(y0-y) = "<<fabs(y0-y)<<" = "<<fabs(y0)<<" - "<<fabs(y)<<" >tol\n";
                 cout<<"TOL = "<<tol<<endl;
         }
         //sleep(3);
@@ -1212,7 +1212,7 @@ void PG_gold (void(*func)(int d, double *a, double &fx), int n, double &step, do
                                 cout<<"step = "<<step<<endl;
 
                         }
-                        if((abs(l2-l1)>=xtol)){
+                        if((fabs(l2-l1)>=xtol)){
                                 if(f1<f2){
                                         step=l1;
                                 }else{
@@ -1289,8 +1289,8 @@ void OptppFeval_conv_shtraf_cv(int dim, const ColumnVector& x, double& fx, int& 
         for(int i=1;i<=dim;i++){
                 tmpx=x(i);
                 cout<<"x("<<i<<")= "<<x(i)<<endl;
-                //tmp=pow(abs(1-abs(tmpx)),100);
-                tmp=pow(abs(tmpx),100);
+                //tmp=pow(fabs(1-fabs(tmpx)),100);
+                tmp=pow(fabs(tmpx),100);
                         shtraf=shtraf+tmp;
                         cout<<" Shtraf_["<<i<<"] = "<<shtraf<<" tmpshtraf = "<<tmp<<" tmpx = "<<tmpx<<endl;
           };
@@ -1361,8 +1361,8 @@ void OptppFeval_conv_shtraf(int dim, double* x, double& fx, int& result){
         for(int i=0;i<dim;i++){
                 tmpx=x[i];
                 cout<<"x("<<i<<")= "<<x[i]<<endl;
-                //tmp=pow(abs(1-abs(tmpx)),100);
-                tmp=pow(abs(tmpx),100);
+                //tmp=pow(fabs(1-fabs(tmpx)),100);
+                tmp=pow(fabs(tmpx),100);
                         shtraf=shtraf+tmp;
                         cout<<" Shtraf_["<<i<<"] = "<<shtraf<<" tmpshtraf = "<<tmp<<" tmpx = "<<tmpx<<endl;
           };

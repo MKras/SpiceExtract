@@ -11,7 +11,7 @@
 
 #include "spiceextr.h"
 #include <stdlib.h>// for MAX_PATH
-#include <cmath>// in math.h abs(double) - gives ERROR!
+#include <cmath>//
 
 #include <gsl/gsl_errno.h>
 #include <gsl/gsl_spline.h>
@@ -625,7 +625,7 @@ SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, st
             if(parametric){
                 double tval=start;
                 QVector <QString> cir_init;
-                //if(abs(start)<=abs(stop)) qDebug()<<"start<=stop = "<<QString("%1").arg(start)<<" "<<QString("%1").arg(stop);
+                //if(fabs(start)<=fabs(stop)) qDebug()<<"start<=stop = "<<QString("%1").arg(start)<<" "<<QString("%1").arg(stop);
                 while(tval<=stop){
                     //qDebug()<<QString("%1").arg(start)<<" "<<QString("%1").arg(stop)<<" param = "<<param;
 
@@ -1294,8 +1294,8 @@ SpiceExtr::xyData SpiceExtr::GetExperimentResults_xy(string sp_exp){
 
                             int pos = rx.indexIn(line);
                             if (pos > -1) {                           
-                                //res.x.push_back(abs(rx.cap(1).toDouble()));
-                                //res.y.push_back(abs(rx.cap(2).toDouble()));
+                                //res.x.push_back(fabs(rx.cap(1).toDouble()));
+                                //res.y.push_back(fabs(rx.cap(2).toDouble()));
                                 res.x.push_back(rx.cap(1).toDouble());
                                 res.y.push_back(rx.cap(2).toDouble());
                             }
@@ -1313,7 +1313,7 @@ double SpiceExtr::CompareCurves_Err1( xyData sim, xyData exp){
                 for(int i=0;i<sim.x.size();i++){
                      if(sim.y[i]!=0){
 
-                                tmp=abs((sim.y[i]-exp.y[i])/sim.y[i]);
+                                tmp=fabs((sim.y[i]-exp.y[i])/sim.y[i]);
                                 res=res+tmp;
 
                             }else zero++;
@@ -1326,9 +1326,9 @@ double SpiceExtr::CompareCurves_Err1( xyData sim, xyData exp){
 }
 double SpiceExtr::CompareCurves_Err2( xyData sim, xyData exp){
     int zero=0; double tmp, res;
-    //tmp = abs(sim.y[i]-exp.y[i])/abs(max(sim.y[i],exp.y[i]));
+    //tmp = fabs(sim.y[i]-exp.y[i])/fabs(max(sim.y[i],exp.y[i]));
         for(int i=0;i<sim.y.size();i++){
-            tmp = abs((sim.y[i]-exp.y[i])/max(abs(sim.y[i]),abs(exp.y[i])));
+            tmp = fabs((sim.y[i]-exp.y[i])/max(fabs(sim.y[i]),fabs(exp.y[i])));
             if(tmp!=tmp) zero++;
                 else res=res+tmp;
                 }
@@ -1342,7 +1342,7 @@ double SpiceExtr::CompareCurves_Err3( xyData sim, xyData exp){
     int zero=0; double tmp, res, a;
         for(int i=0;i<sim.y.size();i++){
                 if(exp.x[i]!=0){
-                        a=abs((sim.y[i]-exp.y[i])/exp.y[i]);
+                        a=fabs((sim.y[i]-exp.y[i])/exp.y[i]);
 
                         tmp=a*a;
                         res=res+tmp;
@@ -1361,7 +1361,7 @@ int size = exp.x.size();
 
 for(int i=0;i<size;i++){
     tmp_x=XviaY(exp,sim.y.at(i),i);
-    tmp = abs((exp.x.at(i)-tmp_x)/max(abs(tmp_x),abs(exp.x.at(i))));
+    tmp = fabs((exp.x.at(i)-tmp_x)/max(fabs(tmp_x),fabs(exp.x.at(i))));
     if(tmp!=tmp) zero++;
         else res_x=res_x+tmp;
 }

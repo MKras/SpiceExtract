@@ -143,7 +143,7 @@ void Plot::reDrow(){
         //на случай равномерного шага
         //double x1 = dataExp.at(0).x();
         //double x2 = dataExp.at(1).x();
-        //double delta_init=std::abs(x2-x1);
+        //double delta_init=std::fabs(x2-x1);
         //qDebug()<<"DELTA1 = "<<delta_init;
         //delta_init = sqrt((delta_init)*(delta_init));
 
@@ -153,10 +153,10 @@ void Plot::reDrow(){
             //смотрим, закончится ли набор точек для текущей кривой
             double x1 = dataExp.at(k).x();
             double x2 = dataExp.at(k+1).x();
-            if(((std::abs(x1))<(std::abs(x2)))
-                ||(((std::abs(x1))>(std::abs(x2)))&&((x1<=0)&&(x2<=0)))
+            if(((std::fabs(x1))<(std::fabs(x2)))
+                ||(((std::fabs(x1))>(std::fabs(x2)))&&((x1<=0)&&(x2<=0)))
                 ){
-                //qDebug()<<"TRUE delta = "<<std::abs(x2-x1)<<" = "<<"x2-x1 = "<<x2<<" - "<<x1;
+                //qDebug()<<"TRUE delta = "<<std::fabs(x2-x1)<<" = "<<"x2-x1 = "<<x2<<" - "<<x1;
                 if(Expd) Exp.append(dataExp.at(k));
                 if(Outd) Sim.append(dataOut.at(k));
                 if(k==dataExp.size()-2){
