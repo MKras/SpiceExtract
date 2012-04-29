@@ -10,6 +10,7 @@ message( STATUS "\nBuilding ${PROJECT} started")
 option (WITH_LEVMAR "Use LevMar library" OFF)
 option (WITH_GALIB "Use GALib library" OFF)
 option (WITH_OPTPP "Use OPT++ library" OFF)
+option (USE_X86_64 "Use x86_64 arch" ON)
 
 
 file(GLOB ${PROJECT}_SOURCES *.cpp  
@@ -106,7 +107,10 @@ set (DEFFINITIONS
 	)
 	
 add_definitions( -c )	
-add_definitions( -m64 )	
+if(USE_X86_64)
+    message( STATUS "YOU use X86_64 arch!\n")
+    add_definitions( -m64 )
+endif(USE_X86_64)
 add_definitions( -pipe )	
 add_definitions( -g )	
 add_definitions( -Wall )	
