@@ -18,6 +18,14 @@ ExtrThread::ExtrThread(curve &c): QThread()
     curvect.append(c);
     
 }
+
+ExtrThread::ExtrThread(curve &c, QString configfileName): QThread()
+{
+    configfileName_ = configfileName;
+    Null=false;
+    curvect.append(c);
+}
+
 ExtrThread::ExtrThread(QVector <curve> &c): QThread()
 {
     Null=false;

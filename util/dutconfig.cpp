@@ -37,6 +37,14 @@ QTextStream out(stdout);
    doc.appendChild(DUT);     
 }
 
+DUTconfig::DUTconfig(QIODevice *device, QString configfileName)
+    : device_(device)
+{
+    configfileName_ = configfileName;
+    if(NULL != device_ )
+        DUTconfig(device_);
+}
+
 DUTconfig::DUTconfig(){    
     QString filename="z_out.xml";
     const int Indent = 4;

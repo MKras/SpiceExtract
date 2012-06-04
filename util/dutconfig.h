@@ -19,6 +19,7 @@ class DUTconfig
 public:    
     DUTconfig();
     DUTconfig(QIODevice *device);
+    DUTconfig(QIODevice *device, QString configfileName);
     void getTree(QStandardItem *item);
     //void getTreeItems(QStandardItem *item, QDomElement *dom);
     //QStandardItem* getTree();
@@ -38,6 +39,8 @@ public:
     //void modelpathchanged();
 
 private:
+    QIODevice *device_;
+    QString configfileName_;
     QDomNode getDut(QDomNode root);
     //QDomElement getDut(QDomElement root);
     QDomNode getConfig(QDomNode root);

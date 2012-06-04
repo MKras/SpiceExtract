@@ -662,6 +662,7 @@ void MainWindow::calculate(){
 
                 //qDebug()<<"MainWindow::calculate "<<QString::fromStdString(cur.model_path)<<"\n";
                 cur = DUT->getCurveInfo(idx);
+                cur.path = configfileName.toStdString();
                 run(cur, idx);
             }
         }
@@ -678,7 +679,7 @@ void MainWindow::run(curve cur, QModelIndex idx){
                 //qDebug()<<"MainWindow::run "<<QString::fromStdString(cur.model_path)<<"\n";
 
 
-                extr = new ExtrThread(cur);
+                extr = new ExtrThread(cur, configfileName);
 
                 qRegisterMetaType<curve>("curve");
                 //connect(extr, SIGNAL(started()), this, SLOT(processStarted()),Qt::QueuedConnection);

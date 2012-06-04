@@ -19,6 +19,7 @@ class ExtrThread: public QThread
     Q_OBJECT
 public:
     ExtrThread(curve &c);
+    ExtrThread(curve &c, QString configfileName);
     ExtrThread(QVector <curve> &c);
     ExtrThread();
     ~ExtrThread();
@@ -36,6 +37,7 @@ private:
         int curTask;
     };
 
+    QString configfileName_;
     bool execute();
     bool endOfStream;
     //curve cur;

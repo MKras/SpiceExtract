@@ -22,6 +22,7 @@ struct curve{
         //string outdata;
         string AlgOpt;
         string model_path;
+        string path;
         double result;
         ///////////////////
         vector<string>  spiceOldVal;
