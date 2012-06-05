@@ -839,19 +839,6 @@ void MainWindow::plot()
 
 void MainWindow::plot_single(){
 
-//    //QString str = QDir::currentPath();
-
-//    QVector<QString> fileOut;
-//    QVector<QString> fileExp;
-
-
-//    //for(int i=0; i<cur.inFile.size();i++){
-//        fileOut.append(ui->filestableWidget->item(ui->filestableWidget->currentRow(),1)->text());
-//        fileExp.append(ui->filestableWidget->item(ui->filestableWidget->currentRow(),2)->text());
-//    //}
-
-//    Plot *plot = new Plot( fileOut, fileExp, "X Axis","Y Axis");
-//    plot->show(this);
     plot();
 }
 

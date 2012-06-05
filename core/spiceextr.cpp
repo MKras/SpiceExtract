@@ -618,10 +618,7 @@ SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, st
                             parametric = true;
                             //break;
                         }
-
-
                     }
-
                 }
             cir.close();
 
@@ -735,7 +732,6 @@ SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, st
 
             return res;
 
-
 }
 double SpiceExtr::RunSimulation(){    
         char *cp=get_current_dir_name ();
@@ -788,11 +784,6 @@ double SpiceExtr::RunSimulation(){
                     res=res+CompareCurves(GetSimulationResults_xy(tmpspiceout),GetExperimentResults_xy(tmpspiceexp), tmpspiceout, tmpspiceexp);
                     qDebug()<<"piceExtr::RunSimulation ReStmp["<<i<<"] ="<<res;
                 }
-
-
-
-
-
 
         }
         chdir(cp);        
