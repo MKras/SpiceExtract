@@ -86,7 +86,7 @@ public:
         void getOptInput(string spice_param);
         //void Run();
         //void Init();
-        bool Init(curve *cur);
+        void Init(curve *cur);
         double Simulate(vector<double>spiceinput);
         int getParametersNumber();
         void setAlgorythm(int alg);
@@ -99,11 +99,11 @@ public:
         double getUpper(int i);
         double getLower(int i);
         string getName(int i);
-        void setValue(int i, double v);
-        void setUpper(int i, double u);
-        void setLower(int i, double l);
-        double GetGradStep(int i);
-        void SetGradStep(int i, double step);
+        void setValue(size_t i, double v);
+        void setUpper(size_t i, double u);
+        void setLower(size_t i, double l);
+        double GetGradStep(size_t i);
+        void SetGradStep(size_t i, double step);
 
         //GA
         float getPCross();

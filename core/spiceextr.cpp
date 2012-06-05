@@ -258,21 +258,21 @@ void SpiceExtr::setLambda(double lamb){
         lambda=lamb;
 };
 
-void SpiceExtr::setValue(int i, double v){
+void SpiceExtr::setValue(size_t i, double v){
         if(val.size()>i){
                 val[i]=v;
         }else{
                 cerr<<"SpiceExtr::setValue size is out of range"<<"val.size = "<<val.size()<<" i = "<<i<<endl;
         }
 };
-void SpiceExtr::setUpper(int i, double u){
+void SpiceExtr::setUpper(size_t i, double u){
         if(val_up.size()>i){
                 val_up[i]=u;
         }else{
                 cerr<<"SpiceExtr::getUpper size is out of range"<<"val_up.size = "<<val_up.size()<<" i = "<<i<<endl;
         }
 };
-void SpiceExtr::setLower(int i, double l){
+void SpiceExtr::setLower(size_t i, double l){
         if(val_low.size()<=i){
                 val_low[i]=l;
         }else{
@@ -335,10 +335,10 @@ int SpiceExtr::getErrorFunction(){
         getParams();       
 };*/
 
-double SpiceExtr::GetGradStep(int i){
+double SpiceExtr::GetGradStep(size_t i){
         return gradstep[i];
 };
-void SpiceExtr::SetGradStep(int i, double step){
+void SpiceExtr::SetGradStep(size_t i, double step){
         if(gradstep.size()<=i){
                 gradstep[i]=step;
                 }else{
@@ -357,7 +357,7 @@ void SpiceExtr::SetGradStep(int i, double step){
 
 };*/
 
-bool SpiceExtr::Init(curve *cur){
+void SpiceExtr::Init(curve *cur){
     /*qDebug()<<"\nINIT\n";
     qDebug()<<"bool SpiceExtr::Init(curve *cur)\n";
     for(int i=0;i<cur->inFile.size();i++){
@@ -377,15 +377,14 @@ bool SpiceExtr::Init(curve *cur){
         prefix = cur->get_prefix();
 
         setSpiceInputValues(prefix+getSpiceLib());
-        for(int i=0;i<val.size();i++){
+        for(size_t i=0;i<val.size();i++){
                 gradstep.push_back((val_up[i]-val_low[i])*accrcy);
         }
         bounds_transform();
-
 };
 
 void SpiceExtr::getParams(curve *cur){
-int i=0;
+size_t i=0;
     qDebug()<<"void SpiceExtr::getParams(curve *cur)\n";   
     qDebug()<<"SpiceExtr::getParams ModelPath = "<<QString::fromStdString(cur->model_path)<<"\n";
 
@@ -494,7 +493,7 @@ void SpiceExtr::getOptInput(string spice_param){
 
 
 double SpiceExtr::getVal_by_Name(string v_n){
-        for(int i=0; i<val_name.size();i++){
+        for(size_t i=0; i<val_name.size();i++){
                 if(val_name[i] == v_n) {
 
                 cout<<"getVal_by_Name: "<<val_name[i]<<" "<<val[i]<<endl;
@@ -502,6 +501,7 @@ double SpiceExtr::getVal_by_Name(string v_n){
                 }else return NULL;
         }
         cerr<<"There no Value for this parameter Name\n";
+        return NULL;
 };
 
 // в данной версси будет предполагаться, что настраиваемая модель хранится в отдельном файле.
@@ -531,7 +531,7 @@ void SpiceExtr::setSpiceInputValues(string sl){
                               int pos = 0;//m.indexIn(line);
                               while ((pos = m.indexIn(line, pos)) != -1) {
                                    QString  line_par = m.cap(1);
-                                   for(int k=0; k<val_name.size();k++){
+                                   for(size_t k=0; k<val_name.size();k++){
                                        stringstream d2str;
                                        string tstr;
                                        d2str<<val[k];
@@ -572,7 +572,7 @@ void SpiceExtr::setSpiceInputValues(string sl){
 
 int SpiceExtr::CountExperimentPoints(){
                 ExperimentPoints=0;
-        for(int i=0;i<spicein.size();i++){
+        for(size_t i=0;i<spicein.size();i++){
                 ExperimentPoints=ExperimentPoints+GetExperimentResults_xy(prefix+spiceexp[i]).y.size();
         }
         return ExperimentPoints;
@@ -590,7 +590,7 @@ SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, st
     QRegExp rx("\\*\\@parametric\\s*([\\d\\w]*)\\s*=\\s*([+-]?\\d+\\\.?\\d*[eE]?[+-]?\\d*)\\s*([+-]?\\d+\\\.?\\d*[eE]?[+-]?\\d*)\\s*([+-]?\\d+\\\.?\\d*[eE]?[+-]?\\d*).*");
     //QRegExpValidator v(rx, 0);
     QString s;
-    int pos = 0;
+    size_t pos = 0;
     bool parametric=false;
     QString param;
     double start,stop,step;
@@ -687,7 +687,7 @@ SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, st
                         res.x.push_back(tval);
                         res.y.push_back(tres.y.at(0));
                     }else if(tres.y.size()>1){
-                        for (int i = 0; i < res.x.size(); ++i) {
+                        for (size_t i = 0; i < res.x.size(); ++i) {
                             res.x.push_back(tres.x.at(i));
                             res.y.push_back(tres.y.at(i));
                         }
@@ -714,7 +714,7 @@ SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, st
                 cir.setFileName(QString::fromStdString("./"+tmpspiceout));
                         if(cir.open(QIODevice::ReadWrite)){
                             QTextStream stream( &cir );
-                            for (int i = 0; i < res.x.size(); ++i) {
+                            for (size_t i = 0; i < res.x.size(); ++i) {
                                 stream<<QString("%1").arg(res.x.at(i))<<" "<<QString("%1").arg(res.y.at(i))<<"\n";
                                 //qDebug()<<QString("%1").arg(res.x.at(i))<<" "<<QString("%1").arg(res.y.at(i));
                             }
@@ -748,7 +748,7 @@ double SpiceExtr::RunSimulation(){
         chdir(cddir.c_str());
 
         qDebug()<<"SpiceExtr::RunSimulation start loop";
-        for(int i=0;i<spicein.size();i++){
+        for(size_t i=0;i<spicein.size();i++){
 
 
                 tmpspicein=spicein[i];
@@ -796,13 +796,12 @@ double SpiceExtr::RunSimulation(){
 vector<double> SpiceExtr::GetAllSimulationResults(){
         vector <double> allres;
 
-        for(int i=0;i<spiceout.size();i++){
+        for(size_t i=0;i<spiceout.size();i++){
                 qDebug()<<" SpiceExtr::GetAllSimulationResults";
 
                 QRegExp rx("^\\s*([+-]?\\d+.?\\d*[eE]?[+-]?\\d*)\\s+([+-]?\\d+.?\\d*[eE]?[+-]?\\d*).*");
                 QRegExpValidator v(rx, 0);
                 QString s;
-                int pos = 0;
                 QFile sim(QString::fromStdString("./"+spiceout[i]));
                         if(sim.open(QIODevice::ReadOnly)){
                             QTextStream stream( &sim );
@@ -1238,12 +1237,11 @@ SpiceExtr::xyData SpiceExtr::GetSimulationResults_xy(string sp_sim){
 vector<double> SpiceExtr::GetAllExperimentResults(){
         vector <double> allres;
         xyData tmpres;
-        for(int i=0;i<spiceexp.size();i++){
+        for(size_t i=0;i<spiceexp.size();i++){
 
                 QRegExp rx("([+-]?\\d+.?\\d*[eE]?[+-]?\\d*)\\s+([+-]?\\d+.?\\d*[eE]?[+-]?\\d*).*");
                 QRegExpValidator v(rx, 0);
                 QString s;
-                int pos = 0;
                 QFile exp(QString::fromStdString("./"+spiceexp[i]));
                         if(exp.open(QIODevice::ReadOnly)){
                             QTextStream stream( &exp );
@@ -1304,7 +1302,7 @@ SpiceExtr::xyData SpiceExtr::GetExperimentResults_xy(string sp_exp){
 
 double SpiceExtr::CompareCurves_Err1( xyData sim, xyData exp){
     int zero=0; double tmp, res;
-                for(int i=0;i<sim.x.size();i++){
+                for(size_t i=0;i<sim.x.size();i++){
                      if(sim.y[i]!=0){
 
                                 tmp=fabs((sim.y[i]-exp.y[i])/sim.y[i]);
@@ -1319,9 +1317,9 @@ double SpiceExtr::CompareCurves_Err1( xyData sim, xyData exp){
      return res;
 }
 double SpiceExtr::CompareCurves_Err2( xyData sim, xyData exp){
-    int zero=0; double tmp, res;
+    size_t zero=0; double tmp, res;
     //tmp = fabs(sim.y[i]-exp.y[i])/fabs(max(sim.y[i],exp.y[i]));
-        for(int i=0;i<sim.y.size();i++){
+        for(size_t i=0;i<sim.y.size();i++){
             tmp = fabs((sim.y[i]-exp.y[i])/max(fabs(sim.y[i]),fabs(exp.y[i])));
             if(tmp!=tmp) zero++;
                 else res=res+tmp;
@@ -1334,7 +1332,7 @@ double SpiceExtr::CompareCurves_Err2( xyData sim, xyData exp){
 
 double SpiceExtr::CompareCurves_Err3( xyData sim, xyData exp){
     int zero=0; double tmp, res, a;
-        for(int i=0;i<sim.y.size();i++){
+        for(size_t i=0;i<sim.y.size();i++){
                 if(exp.x[i]!=0){
                         a=fabs((sim.y[i]-exp.y[i])/exp.y[i]);
 
@@ -1349,7 +1347,7 @@ double SpiceExtr::CompareCurves_Err3( xyData sim, xyData exp){
 }
 
 double SpiceExtr::CompareCurves_Err4_x( xyData sim, xyData exp){
-int zero=0; double res_x;
+size_t zero=0; double res_x;
 double tmp_x, tmp;
 int size = exp.x.size();
 
@@ -1367,7 +1365,7 @@ return res_x;
 }
 
 SpiceExtr::xyData SpiceExtr::GSL_approximate(xyData *sim, xyData *exp){
-    int size = 0, i=0;
+    size_t size = 0, i=0;
     xyData simOut;
     if(exp->y.size()>sim->y.size()) size=sim->y.size();
         else size=exp->y.size();
@@ -1429,7 +1427,6 @@ SpiceExtr::xyData SpiceExtr::GSL_approximate(xyData *sim, xyData *exp){
         simOut.x.clear();
         simOut.y.clear();
     }
-    //approximated=true;
     qDebug()<<"GSL_approximate end";
     return simOut;
 }
@@ -1437,7 +1434,7 @@ SpiceExtr::xyData SpiceExtr::GSL_approximate(xyData *sim, xyData *exp){
 double SpiceExtr::interpolate(int init, std::vector<double> x, std::vector<double> y, double x_val){
     //qDebug()<<"INTERPOLATE START";
     double res;
-    int min, max, tmp;
+    size_t min, max, tmp;
     //if((init<=x.size())&&(init>0)){
     if((init>0)){
 
@@ -1538,7 +1535,7 @@ double SpiceExtr::interpolate(int init, std::vector<double> x, std::vector<doubl
 SpiceExtr::xyData SpiceExtr::interpolation(xyData *sim, xyData *exp){
     xyData simOut;
 
-    int size = 0, i=0;
+    size_t i=0, size=0;
 
     if(exp->y.size()>sim->y.size()) size=sim->y.size();
         else size=exp->y.size();
@@ -1650,10 +1647,9 @@ double SpiceExtr::CompareCurves( xyData sim, xyData exp, string Fout, string Fex
         //double *s_x,*s_y, *e_x, *e_y, *delta, *rel_err;
         qDebug()<<"before exp.x.size()";
         //int size = exp.x.size(); //все размеры равны
-        int i;
+        size_t i;
         double res_y,res_x;
 
-        bool approximated=false;
         qDebug()<<"before ErrorFunction";
         //на случай, когда при моделировании произошла ошибка (например, длина канала отрицательна)
         //и нету результатов расчета
@@ -1663,7 +1659,7 @@ double SpiceExtr::CompareCurves( xyData sim, xyData exp, string Fout, string Fex
             //если не заполнены экспериментальные данные
             if((sim.y.size()!=0)&&((exp.y.size()==0))){
                 // они заполнытся результатами моделирования
-                for (int i=0;i<sim.x.size();i++) {
+                for (size_t i=0;i<sim.x.size();i++) {
                     exp.x.push_back(sim.x[i]);
                     exp.y.push_back(sim.y[i]);
                 }
@@ -1681,11 +1677,10 @@ double SpiceExtr::CompareCurves( xyData sim, xyData exp, string Fout, string Fex
             }else
                 //случай, когда при моделировании произошла
                 if((sim.y.size()==0)){
-            for (int i=0;i<exp.x.size();i++) {
+            for (size_t i=0;i<exp.x.size();i++) {
                 sim.x.push_back(0);
                 sim.y.push_back(0);
             }
-            approximated=false;
         }else
             //когда количество экспериментальных точек не соответствует количеству точек при моделировании
             if (sim.y.size()!=exp.y.size()){
@@ -1748,9 +1743,8 @@ double SpiceExtr::CompareCurves( xyData sim, xyData exp, string Fout, string Fex
 };
 
 double SpiceExtr::XviaY(xyData data, double f, int i){
-    int tmp;
-    double init;
-    double res;    
+    size_t tmp;
+    double res=0;
 
     bool erise;
     if(data.y.at(i)==f) {
@@ -1758,7 +1752,6 @@ double SpiceExtr::XviaY(xyData data, double f, int i){
         return res;
     }
     tmp=i;
-    init=data.x.at(i);
     //не является ли крайней точкой
     //if((i!=0)&&(i!=data.x.size())){
         //ф-я увеличивается по Х или уменьшается
@@ -1851,7 +1844,7 @@ double SpiceExtr::XviaY(xyData data, double f, int i){
 
 double SpiceExtr::Simulate(vector<double>inputval){
         if (inputval.size()==val.size()){
-                for(int i=0;i<inputval.size();i++){
+                for(size_t i=0;i<inputval.size();i++){
                         val[i]=inputval[i];
                 }
                 return RunSimulation();
@@ -1865,7 +1858,7 @@ int SpiceExtr::getParametersNumber(){
 };
 
 void SpiceExtr::OptppInit(int n, double* x){
-        for(int i=0;i<val.size();i++){
+        for(size_t i=0;i<val.size();i++){
                 x[i]=val[i];
         }     
 };
@@ -2043,8 +2036,8 @@ void SpiceExtr::CentralDeriv(int dim, double* x, int& res,
         cout<<"CentralDeriv: \nh = "<<h<<endl;
         double tmpx[dim];
 
-        for(int i=0;i<dim;i++){
-                tmpx[i]=x[i];
+        for(int ii=0;ii<dim;ii++){
+                tmpx[ii]=x[ii];
         };        
 
         double fm1;

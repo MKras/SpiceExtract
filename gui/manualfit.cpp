@@ -33,7 +33,7 @@ ManualFit::ManualFit(curve &c, QWidget *parent): QWidget(parent){
     cur = c;
 
 
-    for(int i=0; i<cur.spiceParam.size();i++){
+    for(size_t i=0; i<cur.spiceParam.size();i++){
         mainVBL->addLayout(createOne(&cur, i));
     };
 
@@ -122,7 +122,7 @@ void ManualFit::plot(){
     old = QString::fromStdString(cur.AlgOpt);
 
     qDebug()<<"VALUE:: \n";
-    for(int i=0;i<cur.spiceInit.size();i++){
+    for(size_t i=0;i<cur.spiceInit.size();i++){
         cur.spiceInit.at(i)=QString("%1").arg(SpinBox.at(i)->value()).toStdString();
     }
 
