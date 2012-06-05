@@ -266,7 +266,7 @@ void MainWindow::fillTables(curve res){
 
     //теперь заполняем таблицы полученной инфой
     //таблица с файлами
-    int i=0;
+    size_t i=0;
     ui->filestableWidget->setRowCount(0);
     for(i=0;i<res.expFile.size();i++){
         ui->filestableWidget->setRowCount(ui->filestableWidget->rowCount()+1);
@@ -668,7 +668,7 @@ void MainWindow::calculate(){
                 //qDebug()<<"MainWindow::calculate "<<QString::fromStdString(cur.model_path)<<"\n";
                 cur = DUT->getCurveInfo(idx);
                 cur.path = configfileName.toStdString();
-                run(cur, idx);
+                run(cur);
             }
         }
 }else{
@@ -678,7 +678,7 @@ void MainWindow::calculate(){
 
 }
 
-void MainWindow::run(curve cur, QModelIndex idx){
+void MainWindow::run(curve cur){
     //где - то в этой ф-и кроется причина вылетов программы
 
                 //qDebug()<<"MainWindow::run "<<QString::fromStdString(cur.model_path)<<"\n";
@@ -748,7 +748,7 @@ void MainWindow::manualFit(){
                 QVector<QString> fileOut;
                 QVector<QString> fileExp;
 
-                for(int i=0; i<cur.inFile.size();i++){
+                for(size_t i=0; i<cur.inFile.size();i++){
                     fileOut.append(QString::fromStdString(cur.get_prefix()+cur.outFile.at(i)));
                     fileExp.append(QString::fromStdString(cur.get_prefix()+cur.expFile.at(i)));
                 }
@@ -807,7 +807,7 @@ void MainWindow::rollBack(){
     //вернем начальное значение, если не нравится новое
     curve cur;
     cur = DUT->getCurveInfo(ui->treeView->currentIndex());
-    for(int i=0;i<cur.spiceInit.size();i++){
+    for(size_t i=0;i<cur.spiceInit.size();i++){
         cur.spiceInit.at(i)=cur.spiceOldVal.at(i);
     }
     fillTables(cur);
@@ -850,7 +850,7 @@ void MainWindow::plot(curve cur){
     cur.path = configfileName.toStdString();
 
 
-    for(int i=0; i<cur.inFile.size();i++){
+    for(size_t i=0; i<cur.inFile.size();i++){
         fileOut.append(QString::fromStdString(cur.get_prefix()+cur.outFile.at(i)));
         fileExp.append(QString::fromStdString(cur.get_prefix()+cur.expFile.at(i)));
     }

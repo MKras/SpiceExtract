@@ -153,8 +153,8 @@ void del(){
 /////////// CORE ////////////////////
 //int core (curve *cur, string path){
 int core (curve *cur, SpiceExtr *spe){
-    int dim; //к-во параметров
-    int i=0; //итератор
+    size_t dim; //к-во параметров
+    size_t i=0; //итератор
     int result; //
     double fx; //результат расчета
 
@@ -178,7 +178,7 @@ int core (curve *cur, SpiceExtr *spe){
 #ifdef WITH_OPTPP
     ColumnVector lower_cv(dim),upper_cv(dim), val_cv(dim), resultvector_cv(dim);// resultvector - вектор в котором будем хранить результаты оптимизации (иксы)
 #endif
-    double lower[dim],upper[dim], val[dim], resultvector[dim];// resultvector - вектор в котором будем хранить результаты оптимизации (иксы)
+    double resultvector[dim];// resultvector - вектор в котором будем хранить результаты оптимизации (иксы)
 
     /*
     OptBCQNewton +
@@ -351,12 +351,11 @@ int core (curve *cur, SpiceExtr *spe){
         double *mx;
         double *ml;
         double *mu;
-        double *grad, *dx;
+        double *dx;
 
         mx = new double[dim];
         ml = new double[dim];
         mu = new double[dim];
-        grad = new double[dim];
         dx = new double[dim];
 
         //double alpha=1e-6;
@@ -412,19 +411,19 @@ int core (curve *cur, SpiceExtr *spe){
 
         yinit=fx;
         cout<<"Fxinit = "<<fx<<endl;
-        for(int i=0;i<dim;i++){
-            init=x[i];
-            x[i]=x[i]+((fabs(sp->getUpper(i)-sp->getLower(i)))*0.01);
+        for(size_t ii=0;ii<dim;ii++){
+            init=x[ii];
+            x[ii]=x[ii]+((fabs(sp->getUpper(ii)-sp->getLower(ii)))*0.01);
             OptppFeval( dim, x, fx, result);
-            y[i]=fx;
-            x[i]=init;
+            y[ii]=fx;
+            x[ii]=init;
         };
 
         OptppFeval( dim, x, fx, result);
         cout<<"1\% deviation test: \n"<<endl;
 
         cout<<"Fxinit = "<<fx<<endl;
-        for(int i=0;i<dim;i++){
+        for(size_t i=0;i<dim;i++){
             cout<<sp->getName(i)<<" = ";
             if (yinit==0){
                 cout<< "yunit = 0! changed to y(i) only: ";
@@ -665,7 +664,7 @@ void goldPDS(void(*func)(int n, double *a, double &fx), int n, double *xarr, dou
         double r=(u[i]-l[i])*g;
         double x1=l[i]+r;
         double x2=u[i]-r;
-        double f1,f2,tf;
+        double f1,f2;
 
         func(n, xarr,finit);
 
@@ -686,7 +685,6 @@ void goldPDS(void(*func)(int n, double *a, double &fx), int n, double *xarr, dou
                         //arra[i]=x;
                         func(n, xarr,f1);
                         x1=xarr[i];
-                        tf=f1;
                 }else{
                         xarr[i]=x1-r;
                         x1=x2;
@@ -694,7 +692,6 @@ void goldPDS(void(*func)(int n, double *a, double &fx), int n, double *xarr, dou
                         //a[i]=x;
                         func(n, xarr,f2);
                         x2=xarr[i];
-                        tf=f2;
                 }
         }
         cout<<"xinit = "<<tval<<" Gold xTol = "<<xtol<<" fabs(x2-x1) = "<<x2<<" - "<<x1<<" = "<<fabs(x2-x1)<<endl;
@@ -744,8 +741,6 @@ double y, y0;
 double res;
 double *grad;
 double *res_x;
-double *x_prev;
-double *pds_xres;//result x vector after optim Lambda search
 double *x_converted;
 double *x_init;
 
@@ -761,8 +756,6 @@ x_init = new double[dim];
 
 func(dim, x, res);
 res_x = new double[dim];
-x_prev = new double[dim];
-pds_xres = new double[dim];
 grad = new double[dim];
 
 bounds_transform(dim, lb, ub, a, b);
@@ -806,10 +799,7 @@ while (fin!=1){
 
         //cout<<"Lambda_l = "<<lambda_l<<" Lambda = "<<lambda<<" Lambda_U = "<<lambda_u<<endl;
         cout<<"Lambda_PDS Start\n"<<" Lambda"<<lambda<<endl;
-        //Lambda_PDS(func, dim, grad, x, pds_xres, lambda, tol, lambda_l, lambda_u, lb, ub);
-        //Step_opt(func, dim, grad, x, pds_xres, lambda, tol, lb, ub);
 
-        //Step_opt(func, dim, grad, x, pds_xres, lambda, scale, tol, lb, ub, a, b);
         PG_step(func, dim, grad, x, lambda, scale, tol,lb, ub,  a, b);
         cout<<"Lambda_PDS END\n"<<"New Lambda"<<lambda<<endl;
 
@@ -874,15 +864,13 @@ void Grad (void(*func)(int n, double *a, double &fx), int dim, double *x, double
 
         double tmpx, grad1, grad2;
         double h;
-        double tmpgrad1, tmpgrad2;
-        double err;
 
         /*bounds_transform(dim, lb, ub, a, b);
         for(int i=0;i<dim;i++){
                                 cout<<"a["<<i<<"] = "<<a[i]<<" b["<<i<<"] = "<<b[i]<<endl;
         }*/
 
-        for(int i=0;i<dim;i++){
+        for(size_t i=0;i<dim;i++){
                 h=dx[i];
                 cout<<"\nGrad I: "<<i<<" dx = "<<dx[i]<<" h = "<<h<<endl;
                 tmpx=x[i];
@@ -1082,13 +1070,11 @@ cout<<"CG_step start\n";
 void CG(void(*func)(int n, double *a, double &fx), int dim, double *x, double *lb, double *ub,
                 double lambda, double scale, double tol, double *dx){
 
-        double *Sk, *grad, *h, *a, *b, *x_converted, *res_x, *x_init, *l_converted, *u_converted;
-        int iter=0, MAXITER=100, i=0;
-        double fres, f;
+        double *grad, *a, *b, *x_converted, *res_x, *x_init, *l_converted, *u_converted;
+        int i=0;
+        double fres;
 
-        Sk=new double [dim];
         grad=new double [dim];
-        h=new double [dim];
         a=new double [dim];
         b=new double [dim];
         x_converted=new double [dim];

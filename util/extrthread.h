@@ -31,7 +31,7 @@ public:
 protected:
     void run();
 private:
-    typedef struct Params
+    struct Params
     {
         int prevTask;
         int curTask;

@@ -47,7 +47,7 @@ private:
     void InsertDevice(QModelIndex idx);
     bool reBbuildTree();
     curve fillCurve();
-    void run(curve cur, QModelIndex idx);
+    void run(curve cur);
     void plot(curve cur);
     void keyPressEvent(QKeyEvent *event);
     QString spiceValueFromModelFile(QString valName);

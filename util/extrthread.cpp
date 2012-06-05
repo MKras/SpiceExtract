@@ -111,6 +111,7 @@ bool ExtrThread::eval_loop(int i, Params &params){
         }
     }
     eval_loop(i+1,params);
+    return true;
 }
 
 bool ExtrThread::eval(int i){
@@ -129,7 +130,7 @@ bool ExtrThread::eval(int i){
     //if(cansel) break;
 
     QString res="";
-    for(int t=0;t<cur.spiceParam.size();t++){
+    for(size_t t=0;t<cur.spiceParam.size();t++){
         res=res+QString::fromStdString(cur.spiceParam.at(t))+"_x("+QString("%1").arg(t)+") = "
             +QString::fromStdString(cur.spiceInit.at(t))
             +" ";

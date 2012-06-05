@@ -45,10 +45,7 @@ DUTconfig::DUTconfig(QIODevice *device, QString configfileName)
         DUTconfig(device_);
 }
 
-DUTconfig::DUTconfig(){    
-    QString filename="z_out.xml";
-    const int Indent = 4;
-
+DUTconfig::DUTconfig(){       
     root = doc.createElement("DUT");
     config = root.toDocument().createElement("Config");
     QDomElement modelpath = config.toDocument().createElement("SpiceModel");
@@ -222,17 +219,21 @@ bool DUTconfig::changeConfig(curve cur){
 QDomNode DUTconfig::getDut(QDomNode root){
   dut = root.firstChild();
   while (!dut.isNull()) {
-      if (dut.toElement().tagName()=="DUT") return dut.toElement();
+      if (dut.toElement().tagName()=="DUT")
+          return dut.toElement();
       dut = dut.nextSibling();
   }
+  return dut.toElement();
 }
 
 QDomNode DUTconfig::getConfig(QDomNode root){
   config = root.firstChild();
   while (!config.isNull()) {
-      if (config.toElement().tagName()=="Config") return config.toElement();
+      if (config.toElement().tagName()=="Config")
+          return config.toElement();
       config = config.nextSibling();
   }
+  return config.toElement();
 }
 
 void DUTconfig::parseNode(const QDomElement &element,
@@ -294,7 +295,7 @@ bool DUTconfig::createDevice(QStandardItemModel* model, QModelIndex idx, QString
 
 
 bool DUTconfig::createCurve(QStandardItemModel* model, QModelIndex idx, QString name, curve cur){
-    int i=0;
+    size_t i=0;
     //добавляем узел в device
     //idx - название прибора
     QDomElement dev = getDevice(idx.data().toString());
@@ -410,7 +411,7 @@ bool DUTconfig::createCurve(QStandardItemModel* model, QModelIndex idx, QString 
 
 bool DUTconfig::changeCurve(QModelIndex idx, curve cur){
     try{
-    int i=0;
+    size_t i=0;
     //добавляем узел в device
     //idx - название прибора
     QDomElement dev = getDevice(idx.parent().data().toString());
@@ -552,6 +553,7 @@ bool DUTconfig::changeCurve(QModelIndex idx, curve cur){
 
         //вроде все добавили)    
         save();
+        return true;
 }
 
 bool DUTconfig::remDev(QStandardItemModel* model, QModelIndex idx){
