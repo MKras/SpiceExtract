@@ -374,8 +374,7 @@ bool SpiceExtr::Init(curve *cur){
         qDebug()<<"prefix+spicelib = "<<QString::fromStdString(prefix+getSpiceLib())<<"\n";
         //setSpiceInputValues(prefix+spicelib);
 
-        size_t dir_pos = cur->path.find(cur->model_path.substr(0, cur->model_path.find_last_of("/")));
-        prefix = cur->path.substr(0, dir_pos);
+        prefix = cur->get_prefix();
 
         setSpiceInputValues(prefix+getSpiceLib());
         for(int i=0;i<val.size();i++){

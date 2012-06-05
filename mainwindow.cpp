@@ -247,7 +247,10 @@ if (idx.isValid())
             //для ее представления
             //и заполняем таблицы полученной инфой
             //fillTables(DUT->getCurveInfo(idx));
+
             cur = DUT->getCurveInfo(idx);
+            cur.path = configfileName.toStdString();
+
 
             //qDebug()<<"treeItemSelected "<<idx.data().toString();
             fillTables(cur);
@@ -544,6 +547,8 @@ curve MainWindow::fillCurve(){
     //и путь к моделе
     res.model_path=ui->model_path->text().toStdString();
 
+    res.path = configfileName.toStdString();
+
     //Вроде всю инфу собрали. Возвращаем
     //qDebug()<<"fillCurve\n";
     //DUT->getGlobalParams(&res);
@@ -735,6 +740,8 @@ void MainWindow::manualFit(){
             }
             if(isCurve(idx)){
                 cur = DUT->getCurveInfo(idx);
+                cur.path = configfileName.toStdString();
+
 
                 QString str = QDir::currentPath();
 
@@ -742,8 +749,8 @@ void MainWindow::manualFit(){
                 QVector<QString> fileExp;
 
                 for(int i=0; i<cur.inFile.size();i++){
-                    fileOut.append(QString::fromStdString(cur.outFile.at(i)));
-                    fileExp.append(QString::fromStdString(cur.expFile.at(i)));
+                    fileOut.append(QString::fromStdString(cur.get_prefix()+cur.outFile.at(i)));
+                    fileExp.append(QString::fromStdString(cur.get_prefix()+cur.expFile.at(i)));
                 }
 
                 Plot *plot = new Plot( fileOut, fileExp, "X Axis","Y Axis");
@@ -832,19 +839,20 @@ void MainWindow::plot()
 
 void MainWindow::plot_single(){
 
-    //QString str = QDir::currentPath();
+//    //QString str = QDir::currentPath();
 
-    QVector<QString> fileOut;
-    QVector<QString> fileExp;
+//    QVector<QString> fileOut;
+//    QVector<QString> fileExp;
 
 
-    //for(int i=0; i<cur.inFile.size();i++){
-        fileOut.append(ui->filestableWidget->item(ui->filestableWidget->currentRow(),1)->text());
-        fileExp.append(ui->filestableWidget->item(ui->filestableWidget->currentRow(),2)->text());
-    //}
+//    //for(int i=0; i<cur.inFile.size();i++){
+//        fileOut.append(ui->filestableWidget->item(ui->filestableWidget->currentRow(),1)->text());
+//        fileExp.append(ui->filestableWidget->item(ui->filestableWidget->currentRow(),2)->text());
+//    //}
 
-    Plot *plot = new Plot( fileOut, fileExp, "X Axis","Y Axis");
-    plot->show(this);    
+//    Plot *plot = new Plot( fileOut, fileExp, "X Axis","Y Axis");
+//    plot->show(this);
+    plot();
 }
 
 void MainWindow::plot(curve cur){
@@ -852,11 +860,12 @@ void MainWindow::plot(curve cur){
 
     QVector<QString> fileOut;
     QVector<QString> fileExp;
+    cur.path = configfileName.toStdString();
 
 
     for(int i=0; i<cur.inFile.size();i++){
-        fileOut.append(QString::fromStdString(cur.outFile.at(i)));
-        fileExp.append(QString::fromStdString(cur.expFile.at(i)));
+        fileOut.append(QString::fromStdString(cur.get_prefix()+cur.outFile.at(i)));
+        fileExp.append(QString::fromStdString(cur.get_prefix()+cur.expFile.at(i)));
     }
 
     Plot *plot = new Plot( fileOut, fileExp, "X Axis","Y Axis");

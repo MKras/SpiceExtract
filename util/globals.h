@@ -22,6 +22,7 @@ struct curve{
         //string outdata;
         string AlgOpt;
         string model_path;
+        string prefix;
         string path;
         double result;
         ///////////////////
@@ -91,6 +92,11 @@ struct curve{
         //#4 - GAPowerLawScaling
         //#5 - GASharing
         int gascaling;//=3;
+        string get_prefix()
+        {
+            prefix = path.substr(0, path.find(model_path.substr(0, model_path.find_last_of("/"))));
+            return prefix;
+        }
 
 
     };

@@ -762,7 +762,7 @@ curve DUTconfig::getCurveInfo(QModelIndex cur){
   //вроде всю необходимую инфу собрали
     //нет, еще не всю
     //запишем еще и тндекс. Так, на всякий)
-    res.idx = cur;
+    res.idx = cur;    
     getGlobalParams(&res);
 
   //возвращаем структуру в MainWindow
