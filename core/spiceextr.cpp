@@ -36,7 +36,7 @@ SpiceExtr::~SpiceExtr(){
 SpiceExtr::SpiceExtr(): QObject(){
 stop=false;
 
-QRegExp m("(.*\\/).*");
+//QRegExp m("(.*\\/).*");
 //int pos = m.indexIn(QString::fromStdString(path));
 //if( pos > -1){
 //    prefix = m.cap(1).toStdString();
