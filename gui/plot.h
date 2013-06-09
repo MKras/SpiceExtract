@@ -11,12 +11,12 @@
 #include <qapplication.h>
 #include <math.h>
 
-#include <qwt/qwt_plot.h>
-#include <qwt/qwt_plot_curve.h>
-#include <qwt/qwt_plot_zoomer.h>
-#include <qwt/qwt_plot_panner.h>
-#include <qwt/qwt_legend.h>
-#include <qwt/qwt_scale_engine.h>
+#include <qwt_plot.h>
+#include <qwt_plot_curve.h>
+#include <qwt_plot_zoomer.h>
+#include <qwt_plot_panner.h>
+#include <qwt_legend.h>
+#include <qwt_scale_engine.h>
 
 #define MAX_GRAPHICS 32101
 

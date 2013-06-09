@@ -27,8 +27,8 @@ file(GLOB ${PROJECT}_UI *.ui
 file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS} )
 
 #### QWT  #####################################
-set (QWT_INCLUDE_DIR  /usr/local/include)
-set (QWT_DIR  /usr/local/)
+set (QWT_INCLUDE_DIR  /usr/local/include /usr/include/qwt5)
+set (QWT_DIR  /usr/local/ /usr/include)
 set (QWT_LIB ${QWT_DIR}/lib/libqwt.so.5.2.0)
 ################################################
 SET (BUILD_ROOT $ENV{BUILD_ROOT})
