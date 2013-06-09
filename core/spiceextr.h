@@ -24,6 +24,7 @@
 #include "../util/globals.h"
 #include <QProcess>
 #include <QTextStream>
+#include <unistd.h>
 
 #ifdef WITH_OPTPP
 //////OPTPP/////////////
