@@ -27,9 +27,26 @@ file(GLOB ${PROJECT}_UI *.ui
 file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS} )
 
 #### QWT  #####################################
-set (QWT_INCLUDE_DIR  /usr/local/include /usr/include/qwt5)
-set (QWT_DIR  /usr/local/ /usr/include)
-set (QWT_LIB ${QWT_DIR}/lib/libqwt.so.5.2.0)
+SET (QWT_DIR $ENV{QWT_DIR})
+set (QWT_INCLUDE_DIR  /usr/local/include /usr/include/qwt5 /usr/include)
+find_library (QWT_LIB libqwt.so  PATHS ${QWT_DIR} /usr/lib/ /usr/lib64/ /usr/local/lib/ /usr/local/lib64/)
+if (NOT QWT_LIB)
+message (FATAL_ERROR QWT_LIB=${QWT_LIB})
+else ()
+message (STATUS QWT_LIB=${QWT_LIB})
+endif(NOT QWT_LIB)
+
+################################################
+#### LAPACK  #####################################
+SET (LAPACK_DIR $ENV{LAPACK_DIR})
+set (LAPACK_INCLUDE_DIR  ${LAPACK_DIR}/include /usr/local/include /usr/include/lapack /usr/include)
+find_library (LAPACK_LIB liblapack.so  PATHS ${LAPACK_DIR} /usr/lib/ /usr/lib64/ /usr/local/lib/ /usr/local/lib64/)
+
+if (NOT LAPACK_LIB)
+message (FATAL_ERROR LAPACK_LIB=${LAPACK_LIB})
+else ()
+message (STATUS LAPACK_LIB=${LAPACK_LIB})
+endif(NOT LAPACK_LIB)
 ################################################
 SET (BUILD_ROOT $ENV{BUILD_ROOT})
 
@@ -76,9 +93,16 @@ qt4_wrap_cpp (${PROJECT}_MOC_SOURCES ${${PROJECT}_HEADERS})
 
 
 find_file(LIBF2C libf2c.a PATHS /usr/lib/ /usr/lib64/ /usr/local/lib/ /usr/local/lib64/)
+if (NOT LIBF2C)
+message (FATAL_ERROR LIBF2C=${LIBF2C})
+else()
+message (STATUS LIBF2C=${LIBF2C})
+endif(NOT LIBF2C)
+
 
 set(LINK 	
 	lapack
+        ${LAPACK_LIB}
 	gslcblas 
 	gsl
  	${QWT_LIB}
@@ -99,7 +123,7 @@ endif(WITH_OPTPP)
 
 add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H} ${${PROJECT}_RESOURCES})	
 
-target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} ${LIBF2C})
+target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} ${LIBF2C} ${QWT_LIB})
 
 set (DEFFINITIONS
 	_REENTRANT

@@ -1,7 +1,7 @@
 #!/bin/sh
 pwd_path=`pwd`
 
-DIRECTORY=SpiceExtract-build-desktop
+DIRECTORY=SpiceExtract-build
 
 export BUILD_ROOT=$pwd_path/../$DIRECTORY
 
