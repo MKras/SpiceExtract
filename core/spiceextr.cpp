@@ -64,6 +64,13 @@ stop=false;
         itercount=0;
         out_pars = "{1},{2}";        
         simulator = NGSpice;
+
+        //Init NGwrapper
+        NGWrapper_ = new NGSpiceWrapper();
+        NGWrapper_->Init_dll_handler();
+        NGWrapper_->Init_handlers();
+        NGWrapper_->NGngSpice_Init_handle();
+
 }
 
 

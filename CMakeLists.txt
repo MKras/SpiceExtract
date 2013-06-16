@@ -120,10 +120,12 @@ if(WITH_OPTPP)
     list (APPEND LINK newton newmat opt)
 endif(WITH_OPTPP)
 
-
 add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H} ${${PROJECT}_RESOURCES})	
 
 target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} ${LIBF2C} ${QWT_LIB})
+
+#target_link_libraries (pthread dl)
+target_link_libraries (pthread)
 
 set (DEFFINITIONS
 	_REENTRANT

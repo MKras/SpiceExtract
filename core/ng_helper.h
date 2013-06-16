@@ -35,7 +35,7 @@ struct simulation_result_T
     plots_data_T vec_data;
 };
 
-#include "../include/sharedspice.h"
+#include "core/sharedspice.h"
 
 #if defined(__MINGW32__) ||  defined(_MSC_VER)
 #undef BOOLEAN
@@ -56,7 +56,11 @@ static char errstr[128];
 typedef void *  funptr_t;
 #endif
 
+#ifndef NO_BG_GUARD_
 bool no_bg = true;
+#define NO_BG_GUARD_
+#endif
+
 bool not_yet = true;
 bool will_unload = false;
 
@@ -143,7 +147,7 @@ ng_exit(int exitstatus, bool immediate, bool quitexit, void* userdata)
 
 }
 
-/* Callback function called from bg thread in ngspice once per accepted data point */
+/* Callback function called from bg thre        ad in ngspice once per accepted data point */
 int
 ng_data(pvecvaluesall vdata, int numvecs, void* userdata)
 {

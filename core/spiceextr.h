@@ -25,6 +25,7 @@
 #include <QProcess>
 #include <QTextStream>
 #include <unistd.h>
+#include <core/ng_helper.h>
 
 #ifdef WITH_OPTPP
 //////OPTPP/////////////
@@ -299,6 +300,12 @@ signals:
 
 private slots:
     //void toBeKilled();
+
+private:
+    NGSpiceWrapper *NGWrapper_;
+
+public:
+
 
 
 
