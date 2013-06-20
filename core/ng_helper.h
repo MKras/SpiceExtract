@@ -1,41 +1,5 @@
-#ifndef NG_HELPER_H
-#define NG_HELPER_H
-
-
-#include "stdlib.h"
-#include "stdio.h"
-#include <unistd.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <string.h>
-#ifndef _MSC_VER
-#include <stdbool.h>
-#include <pthread.h>
-#else
-#define bool int
-#define true 1
-#define false 0
-#define strdup _strdup
-#endif
-
-#include <pthread.h>
-#include <signal.h>
-
-#include <vector>
-#include <map>
-
-typedef std::vector<float> plot_data_T;
-typedef  std::map < std::string, plot_data_T > plots_data_T;
-
-struct simulation_result_T
-{
-    std::string curplot;
-    plots_data_T vec_data;
-};
-
-#include "core/sharedspice.h"
+//#ifndef NG_HELPER_H
+//#define NG_HELPER_H
 
 #if defined(__MINGW32__) ||  defined(_MSC_VER)
 #undef BOOLEAN
@@ -56,208 +20,23 @@ static char errstr[128];
 typedef void *  funptr_t;
 #endif
 
-#ifndef NO_BG_GUARD_
-bool no_bg = true;
-#define NO_BG_GUARD_
-#endif
-
-bool not_yet = true;
-bool will_unload = false;
-
-ControlledExit ng_exit;
-SendData ng_data;
-SendInitData ng_initdata;
-
-int vecgetnumber = 0;
-double v2dat;
-static bool has_break = false;
-int testnumber = 0;
-void alterp(int sig);
-
-/* functions exported by ngspice */
-funptr_t ngSpice_Init_handle = NULL;
-funptr_t ngSpice_Command_handle = NULL;
-funptr_t ngSpice_Circ_handle = NULL;
-funptr_t ngSpice_CurPlot_handle = NULL;
-funptr_t ngSpice_AllVecs_handle = NULL;
-funptr_t ngSpice_GVI_handle = NULL;
-
-void * ngdllhandle = NULL;
-
-#ifndef _MSC_VER
-pthread_t mainthread;
-#endif // _MSC_VER
-
-
-
-/* Callback function called from bg thread in ngspice to transfer
-   any string created by printf or puts. Output to stdout in ngspice is
-   preceded by token stdout, same with stderr.*/
-int
-ng_getchar(char* outputreturn, void* userdata)
-{
-    printf("%s\n", outputreturn);
-    return 0;
-}
-
-/* Callback function called from bg thread in ngspice to transfer
-   simulation status (type and progress in percent. */
-int
-ng_getstat(char* outputreturn, void* userdata)
-{
-    printf("%s\n", outputreturn);
-    return 0;
-}
-
-/* Callback function called from ngspice upon starting (returns true) or
-  leaving (returns false) the bg thread. */
-int
-ng_thread_runs(bool noruns, void* userdata)
-{
-    no_bg = noruns;
-    if (noruns)
-        printf("bg not running\n");
-    else
-        printf("bg running\n");
-
-    return 0;
-}
-
-/* Callback function called from bg thread in ngspice if fcn controlled_exit()
-   is hit. Do not exit, but unload ngspice. */
-int
-ng_exit(int exitstatus, bool immediate, bool quitexit, void* userdata)
-{
-
-    if(quitexit) {
-        printf("DNote: Returned form quit with exit status %d\n", exitstatus);
-    }
-    if(immediate) {
-        printf("DNote: Unload ngspice\n");
-        ((int * (*)(char*)) ngSpice_Command_handle)("bg_pstop");
-        dlclose(ngdllhandle);
-    }
-
-    else {
-        printf("DNote: Prepare unloading ngspice\n");
-        will_unload = true;
-    }
-
-    return exitstatus;
-
-}
-
-/* Callback function called from bg thre        ad in ngspice once per accepted data point */
-int
-ng_data(pvecvaluesall vdata, int numvecs, void* userdata)
-{
-    int *ret;
-
-    v2dat = vdata->vecsa[vecgetnumber]->creal;
-    if (!has_break && (v2dat > 0.5)) {
-    /* using signal SIGTERM by sending to main thread, alterp() then is run from the main thread,
-      (not on Windows though!)  */
-#ifndef _MSC_VER
-        if (testnumber == 4)
-            pthread_kill(mainthread, SIGTERM);
-#endif
-        has_break = true;
-    /* leave bg thread for a while to allow halting it from main */
-#if defined(__MINGW32__) || defined(_MSC_VER)
-        Sleep (100);
-#else
-        usleep (100000);
-#endif
-//        ret = ((int * (*)(char*)) ngSpice_Command_handle)("bg_halt");
-    }
-    return 0;
-}
-
-/* Case insensitive str eq. */
-/* Like strcasecmp( ) XXX */
-
-int
-cieq(register char *p, register char *s)
-{
-    while (*p) {
-        if ((isupper(*p) ? tolower(*p) : *p) !=
-            (isupper(*s) ? tolower(*s) : *s))
-            return(false);
-        p++;
-        s++;
-    }
-    return (*s ? false : true);
-}
-
-/* Callback function called from bg thread in ngspice once upon intialization
-   of the simulation vectors)*/
-int
-ng_initdata(pvecinfoall intdata, void* userdata)
-{
-    int i;
-    int vn = intdata->veccount;
-    for (i = 0; i < vn; i++) {
-        printf("Vector: %s\n", intdata->vecs[i]->vecname);
-        /* find the location of V(2) */
-        if (cieq(intdata->vecs[i]->vecname, "V(2)"))
-            vecgetnumber = i;
-    }
-    return 0;
-}
-
-/* Funcion called from main thread upon receiving signal SIGTERM */
-void
-alterp(int sig) {
-    ((int * (*)(char*)) ngSpice_Command_handle)("bg_halt");
-}
-
-/* Unify LINUX and Windows dynamic library handling */
-#if defined(__MINGW32__) ||  defined(_MSC_VER)
-
-void *dlopen(const char *name,int type)
-{
-    return LoadLibrary((LPCSTR)name);
-}
-
-funptr_t dlsym(void *hDll, const char *funcname)
-{
-    return GetProcAddress(hDll, funcname);
-}
-
-char *dlerror(void)
-{
-    LPVOID lpMsgBuf;
-    char * testerr;
-    DWORD dw = GetLastError();
-
-    FormatMessage(
-        FORMAT_MESSAGE_ALLOCATE_BUFFER |
-        FORMAT_MESSAGE_FROM_SYSTEM |
-        FORMAT_MESSAGE_IGNORE_INSERTS,
-        NULL,
-        dw,
-        MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-        (LPTSTR) &lpMsgBuf,
-        0,
-        NULL
-    );
-    testerr = (char*)lpMsgBuf;
-    strcpy(errstr,lpMsgBuf);
-    LocalFree(lpMsgBuf);
-    return errstr;
-}
-
-int dlclose (void *lhandle)
-{
-    return (int)FreeLibrary(lhandle);
-}
-#endif
-
-
 //////////////////////////////////
-
+#include <vector>
+#include <map>
 #include <exception>
 #include <stdexcept>
+#include <boost/shared_ptr.hpp>
+
+typedef std::vector<float> plot_data_T;
+typedef  std::map < std::string, plot_data_T > plots_data_T;
+
+struct simulation_result_T
+{
+    std::string curplot;
+    plots_data_T vec_data;
+};
+
+
 
 class NGSpiceWrapper_Exception : public std::exception
 {
@@ -265,11 +44,14 @@ private:
    std::string s;
    bool no_bg = true;
 public:
-   const char* what() const throw() { return s.c_str(); }
-   NGSpiceWrapper_Exception(std::string ss) : s(ss) {}
-   ~NGSpiceWrapper_Exception()  throw() {};
+   const char* what() const throw();
+   NGSpiceWrapper_Exception(std::string ss);
+   ~NGSpiceWrapper_Exception()  throw();
 };
 
+
+class NGSpiceWrapper_Impl;
+typedef boost::shared_ptr<NGSpiceWrapper_Impl> NGSpiceWrapper_ImplPtr;
 
 class NGSpiceWrapper
 {
@@ -295,228 +77,44 @@ private:
 #endif // _MSC_VER
 
 public:
-    void Init_dll_handler(const char * loadstring = "libngspice.so")
-    {
-#ifndef _MSC_VER
-        mainthread = pthread_self();
-#endif // _MSC_VER
-        printf("Load ngspice.dll\n");
-#ifdef __CYGWIN__
-        loadstring = "/cygdrive/c/cygwin/usr/local/bin/cygngspice-0.dll";
-#elif _MSC_VER
-        loadstring = "ngspice.dll";
-    //    loadstring = "d:/Spice_general/ngspice/visualc-shared/Debug/bin/ngspice.dll";
-#elif __MINGW32__
-        loadstring = "D:\\Spice_general\\ngspice\\visualc-shared\\Debug\\bin\\ngspice.dll";
-#else
-        loadstring = "libngspice.so";
-#endif
-        ngdllhandle = dlopen(loadstring, RTLD_NOW);
-        errmsg = dlerror();
-        if (errmsg)
-            throw NGSpiceWrapper_Exception (std::string (errmsg));
-        if (ngdllhandle)
-        {
-            printf("ngspice.dll loaded\n");
-        }
-        else
-        {
-           throw NGSpiceWrapper_Exception (std::string ("ngspice.dll not loaded !\n"));
-           //exit(1);
-        }
-    }
+    void Init_dll_handler(const char * loadstring = "libngspice.so");
 
-    void Init_handlers()
-    {
-        ngSpice_Init_handle = dlsym(ngdllhandle, "ngSpice_Init");
-        errmsg = dlerror();
-        if (errmsg)
-            throw NGSpiceWrapper_Exception (std::string (errmsg));
-        ngSpice_Command_handle = dlsym(ngdllhandle, "ngSpice_Command");
-        errmsg = dlerror();
-        if (errmsg)
-            throw NGSpiceWrapper_Exception (std::string (errmsg));
-        ngSpice_CurPlot_handle = dlsym(ngdllhandle, "ngSpice_CurPlot");
-        errmsg = dlerror();
-        if (errmsg)
-           throw NGSpiceWrapper_Exception (std::string (errmsg));;
-        ngSpice_AllVecs_handle = dlsym(ngdllhandle, "ngSpice_AllVecs");
-        errmsg = dlerror();
-        if (errmsg)
-            throw NGSpiceWrapper_Exception (std::string (errmsg));
-        ngSpice_GVI_handle = dlsym(ngdllhandle, "ngGet_Vec_Info");
-        errmsg = dlerror();
-        if (errmsg)
-            throw NGSpiceWrapper_Exception (std::string (errmsg));
-        ngSpice_Circ_handle = dlsym(ngdllhandle, "ngSpice_Circ");
-         errmsg = dlerror();
-        if (errmsg)
-            throw NGSpiceWrapper_Exception (std::string (errmsg));
+    void Init_handlers();
 
+    int * NGngSpice_Init_handle();
+    int * ngSpice_Command(const std::string & command);
 
-    }
+    void sleep_sec (int seconds);
 
-    int * NGngSpice_Init_handle()
-    {
-        ret = ((int * (*)(SendChar*, SendStat*, ControlledExit*, SendData*, SendInitData*,
-                 BGThreadRunning*, void*)) ngSpice_Init_handle)(ng_getchar, ng_getstat,
-                 ng_exit, NULL, ng_initdata, ng_thread_runs, NULL);
+    int * bg_resume();
 
-        return ret;
-    }
+    int * bg_run();
 
-    int * ngSpice_Command(const std::string & command)
-    {
-        ret = ((int * (*)(char*)) ngSpice_Command_handle)((char*)&command[0]);
-        return  ret;
-    }
+    int * bg_halt();
 
-    void sleep_sec (int seconds)
-    {
-#if defined(__MINGW32__) || defined(_MSC_VER)
-        Sleep (seconds * 1000);
-#else
-        usleep (seconds * 1000000);
-#endif
-    }
+    void load_cir(std::string & cir_path);
 
-    int * bg_resume()
-    {
-        ret = ((int * (*)(char*)) ngSpice_Command_handle)("bg_resume");
-        return  ret;
-    }
+    char ** load_cir(std::vector<std::string> cir);
 
-    int * bg_run()
-    {
-        ret = ((int * (*)(char*)) ngSpice_Command_handle)("bg_run");
-        return  ret;
-    }
-
-    int * bg_halt()
-    {
-        ret = ((int * (*)(char*)) ngSpice_Command_handle)("bg_halt");
-        return  ret;
-    }
-
-    void load_cir(std::string & cir_path)
-    {
-        std::string cir_path_t = std::string ("source "+cir_path);
-#if defined(__CYGWIN__)
-        ret = ((int * (*)(char*)) ngSpice_Command_handle)( (char*)&cir_path_t[0]);
-#elif __MINGW32__
-        ret = ((int * (*)(char*)) ngSpice_Command_handle)(std::string( (char*)&cir_path_t[0]);
-#else
-        ret = ((int * (*)(char*)) ngSpice_Command_handle)(  (char*)&cir_path[0]);
-#endif
-    }
-
-    char ** load_cir(std::vector<std::string> cir)
-    {
-        char ** circarray;
-        circarray = (char**)malloc(sizeof(char*) * (cir.size() + 1));
-        std::vector<std::string>::iterator iter = cir.begin();
-        //    circarray[0] = strdup("test array");
-        for (int k=0; k<cir.size(); k++)
-        {
-            circarray[k] = strdup(&cir[k][0]);
-            std::cout<<std::string(&cir[k][0])<<std::endl;
-        }
-        circarray[cir.size()] = NULL;
-//            ret = ((int * (*)(char**)) ngSpice_Circ_handle)(circarray);
-        return circarray;
-    }
-
-    int * simulate_cir (char ** circarray)
-    {
-        ret = ((int * (*)(char**)) ngSpice_Circ_handle)(circarray);
-        return  ret;
-    }
+    int * simulate_cir (char ** circarray);
 
     /* read current plot while simulation continues */
-    char * get_CurPlot()
-    {
-         curplot_ = ((char * (*)()) ngSpice_CurPlot_handle)();
-         std::cout<<"CurPlot: "<<std::string(curplot_)<<std::endl;
-         return curplot_;
-    }
+    char * get_CurPlot();
 
-    simulation_result_T get_AllVecs (char * curplot)
-    {
-
-        plots_data_T plots_data;
-        simulation_result_T result;
-
-        vecarray_ = ((char ** (*)(char*)) ngSpice_AllVecs_handle)(curplot);
-        /* get length of first vector */
-        if (vecarray_) {
-            char plotvec[256];
-            pvector_info myvec;
-            int veclength;
-
-            int i=0;
-            while(true)
-            {
-                if (vecarray_[i])
-                {
-                    vecname_ = vecarray_[i];
-                    sprintf(plotvec, "%s.%s", curplot, vecname_);
-                    myvec = ((pvector_info (*)(char*)) ngSpice_GVI_handle)(plotvec);
-                    veclength = myvec->v_length;
-                    printf("\nActual length of vector %s is %d\n", plotvec, veclength);
-                    plot_data_T plot_data;
-                    for (int k = 0; k<veclength; k++)
-                    {
-                        //printf ("vector %s data %f k=%i\n" ,plotvec, myvec->v_realdata[k], k);
-                        plot_data.push_back(myvec->v_realdata[k]);
-                    }
-                    plots_data[std::string(vecname_)] = plot_data;
-                    result.curplot = std::string(curplot);
-                    result.vec_data =  plots_data;
-
-                }else
-                    break;
-
-                i++;
-            }
-        }
-
-        return result;
-    }
+    simulation_result_T get_AllVecs (char * curplot);
 
     /* wait until simulation finishes */
-    void wait_until_simulation_finishes()
-    {
-        for (;;) {
-#if defined(__MINGW32__) || defined(_MSC_VER)
-            Sleep (100);
-#else
-            usleep (100000);
-#endif
-            if (no_bg)
-                break;
-        }
-    }
+    void wait_until_simulation_finishes();
 
-    void stop_waiting_until_simulation_finishes()
-    {
-        no_bg = true;
-    }
+    void stop_waiting_until_simulation_finishes();
 
-public:
-    NGSpiceWrapper():
-        ngSpice_Init_handle (NULL)
-      , ngSpice_Command_handle (NULL)
-      , ngSpice_Circ_handle (NULL)
-      , ngSpice_CurPlot_handle (NULL)
-      , ngSpice_AllVecs_handle (NULL)
-      , ngSpice_GVI_handle (NULL)
-      , errmsg (NULL)
-      , ngdllhandle(NULL)
-    {
-
-    }
+    NGSpiceWrapper();
 
     void run_simulation();
+private:
+    NGSpiceWrapper_Impl *NGSpiceWrapper_Impl_;
+    //NGSpiceWrapper_ImplPtr NGSpiceWrapper_Impl_;
+
 };
 
 // example
@@ -581,4 +179,4 @@ public:
 //    exit(0);
 //}
 
-#endif // NG_HELPER_H
+//#endif // NG_HELPER_H

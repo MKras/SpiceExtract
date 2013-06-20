@@ -1,35 +1,31 @@
-#include <core/ng_helper.h>
+#ifndef NG_HELPER_H
+#define NG_HELPER_H
 
 
-typedef std::vector<float> plot_data_T;
-typedef  std::map < std::string, plot_data_T > plots_data_T;
-
-struct simulation_result_T
-{
-    std::string curplot;
-    plots_data_T vec_data;
-};
-
-#include "core/sharedspice.h"
-
-#if defined(__MINGW32__) ||  defined(_MSC_VER)
-#undef BOOLEAN
-#include <windows.h>
-typedef FARPROC funptr_t;
-void *dlopen (const char *, int);
-funptr_t dlsym (void *, const char *);
-int dlclose (void *);
-char *dlerror (void);
-#define RTLD_LAZY	1	/* lazy function call binding */
-#define RTLD_NOW	2	/* immediate function call binding */
-#define RTLD_GLOBAL	4	/* symbols in this dlopen'ed obj are visible to other dlopen'ed objs */
-static char errstr[128];
-#else
-#include <dlfcn.h> /* to load libraries*/
+#include "stdlib.h"
+#include "stdio.h"
 #include <unistd.h>
-#include <ctype.h>
-typedef void *  funptr_t;
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <signal.h>
+#include <string.h>
+#ifndef _MSC_VER
+#include <stdbool.h>
+#include <pthread.h>
+#else
+#define bool int
+#define true 1
+#define false 0
+#define strdup _strdup
 #endif
+
+#include <pthread.h>
+#include <signal.h>
+
+#include "core/ng_helper.h"
+#include "core/sharedspice.h"
+#include <iostream>
 
 #ifndef NO_BG_GUARD_
 bool no_bg = true;
@@ -231,13 +227,17 @@ int dlclose (void *lhandle)
 
 //////////////////////////////////
 
+#include <exception>
+#include <stdexcept>
+
+//NGSpiceWrapper_Exception/////////////////////////////////
 const char* NGSpiceWrapper_Exception::what() const throw() { return s.c_str(); }
-NGSpiceWrapper_Exception ::NGSpiceWrapper_Exception(std::string ss) : s(ss) {}
+NGSpiceWrapper_Exception::NGSpiceWrapper_Exception(std::string ss) : s(ss) {}
 NGSpiceWrapper_Exception::~NGSpiceWrapper_Exception()  throw() {}
+/////////////////////////////////NGSpiceWrapper_Exception
 
 
-
-class NGSpiceWrapper_impl
+class NGSpiceWrapper_Impl
 {
 private:
     /* functions exported by ngspice */
@@ -445,6 +445,7 @@ public:
                 i++;
             }
         }
+
         return result;
     }
 
@@ -468,7 +469,7 @@ public:
     }
 
 public:
-    NGSpiceWrapper_impl():
+    NGSpiceWrapper_Impl():
         ngSpice_Init_handle (NULL)
       , ngSpice_Command_handle (NULL)
       , ngSpice_Circ_handle (NULL)
@@ -483,6 +484,81 @@ public:
 
     void run_simulation();
 };
+
+NGSpiceWrapper::NGSpiceWrapper():
+    ngSpice_Init_handle (NULL)
+  , ngSpice_Command_handle (NULL)
+  , ngSpice_Circ_handle (NULL)
+  , ngSpice_CurPlot_handle (NULL)
+  , ngSpice_AllVecs_handle (NULL)
+  , ngSpice_GVI_handle (NULL)
+  , errmsg (NULL)
+  , ngdllhandle(NULL)
+{
+   //NGSpiceWrapper_Impl_ ( new NGSpiceWrapper_Impl( ) );
+   NGSpiceWrapper_Impl_ = new NGSpiceWrapper_Impl( );
+}
+
+
+void NGSpiceWrapper::Init_dll_handler(const char * loadstring ){
+    return NGSpiceWrapper_Impl_->Init_dll_handler(loadstring);
+}
+
+void NGSpiceWrapper::Init_handlers(){
+    return NGSpiceWrapper_Impl_->Init_handlers();
+}
+
+int * NGSpiceWrapper::NGngSpice_Init_handle(){
+    return NGSpiceWrapper_Impl_->NGngSpice_Init_handle();
+}
+
+int * NGSpiceWrapper::ngSpice_Command(const std::string & command){
+    return NGSpiceWrapper_Impl_->ngSpice_Command(command);
+}
+
+void NGSpiceWrapper::sleep_sec (int seconds){
+    return NGSpiceWrapper_Impl_->sleep_sec(seconds);
+}
+
+int * NGSpiceWrapper::bg_resume(){
+    return NGSpiceWrapper_Impl_->bg_resume();
+}
+
+int * NGSpiceWrapper::bg_run(){
+    return NGSpiceWrapper_Impl_->bg_run();
+}
+
+int * NGSpiceWrapper::bg_halt(){
+    return NGSpiceWrapper_Impl_->bg_halt();
+}
+
+void NGSpiceWrapper::load_cir(std::string & cir_path){
+    return NGSpiceWrapper_Impl_->load_cir(cir_path);
+}
+
+char ** NGSpiceWrapper::load_cir(std::vector<std::string> cir){
+    return NGSpiceWrapper_Impl_->load_cir(cir);
+}
+
+int * NGSpiceWrapper::simulate_cir (char ** circarray){
+    return NGSpiceWrapper_Impl_->simulate_cir(circarray);
+}
+
+char * NGSpiceWrapper::get_CurPlot(){
+    return NGSpiceWrapper_Impl_->get_CurPlot();
+}
+
+simulation_result_T NGSpiceWrapper::get_AllVecs (char * curplot){
+    return NGSpiceWrapper_Impl_->get_AllVecs(curplot);
+}
+
+void NGSpiceWrapper::wait_until_simulation_finishes(){
+    return NGSpiceWrapper_Impl_->wait_until_simulation_finishes();
+}
+
+void NGSpiceWrapper::stop_waiting_until_simulation_finishes(){
+    return NGSpiceWrapper_Impl_->stop_waiting_until_simulation_finishes();
+}
 
 // example
 //int main()
@@ -546,4 +622,4 @@ public:
 //    exit(0);
 //}
 
-
+#endif // NG_HELPER_H
