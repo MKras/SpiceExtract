@@ -1,30 +1,5 @@
-#ifndef NG_HELPER_H
-#define NG_HELPER_H
+#include <core/ng_helper.h>
 
-
-#include "stdlib.h"
-#include "stdio.h"
-#include <unistd.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <signal.h>
-#include <string.h>
-#ifndef _MSC_VER
-#include <stdbool.h>
-#include <pthread.h>
-#else
-#define bool int
-#define true 1
-#define false 0
-#define strdup _strdup
-#endif
-
-#include <pthread.h>
-#include <signal.h>
-
-#include <vector>
-#include <map>
 
 typedef std::vector<float> plot_data_T;
 typedef  std::map < std::string, plot_data_T > plots_data_T;
@@ -256,22 +231,13 @@ int dlclose (void *lhandle)
 
 //////////////////////////////////
 
-#include <exception>
-#include <stdexcept>
-
-class NGSpiceWrapper_Exception : public std::exception
-{
-private:
-   std::string s;
-   bool no_bg = true;
-public:
-   const char* what() const throw() { return s.c_str(); }
-   NGSpiceWrapper_Exception(std::string ss) : s(ss) {}
-   ~NGSpiceWrapper_Exception()  throw() {};
-};
+const char* NGSpiceWrapper_Exception::what() const throw() { return s.c_str(); }
+NGSpiceWrapper_Exception ::NGSpiceWrapper_Exception(std::string ss) : s(ss) {}
+NGSpiceWrapper_Exception::~NGSpiceWrapper_Exception()  throw() {}
 
 
-class NGSpiceWrapper
+
+class NGSpiceWrapper_impl
 {
 private:
     /* functions exported by ngspice */
@@ -479,7 +445,6 @@ public:
                 i++;
             }
         }
-
         return result;
     }
 
@@ -503,7 +468,7 @@ public:
     }
 
 public:
-    NGSpiceWrapper():
+    NGSpiceWrapper_impl():
         ngSpice_Init_handle (NULL)
       , ngSpice_Command_handle (NULL)
       , ngSpice_Circ_handle (NULL)
@@ -581,4 +546,4 @@ public:
 //    exit(0);
 //}
 
-#endif // NG_HELPER_H
+
