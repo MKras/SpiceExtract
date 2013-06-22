@@ -28,20 +28,16 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 
 find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
-...
-target_link_libraries(testTheTester
+add_excecutable (${PROJECT} STATIC ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES})
+
+target_link_libraries(${PROJECT}
                       ${Boost_FILESYSTEM_LIBRARY}
                       ${Boost_SYSTEM_LIBRARY}
                       ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY}
                       )
 
 
-add_excecutable(testTheTester boostTester.cpp)
-target_link_libraries(testTheTester ${Boost_FILESYSTEM_LIBRARY} ${Boost_SYSTEM_LIBRARY})
 add_test(tester tester)
-
-
-
 
 
 #enable_testing ()

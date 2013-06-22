@@ -23,7 +23,7 @@ add_library (${PROJECT} STATIC ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCE
 	
 #target_link_libraries (${PROJECT} ${LINK})
 
-
+#add_subdirectory (tests)
 
 #enable_testing ()
 message( STATUS "Building ${PROJECT} finished\n")

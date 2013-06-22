@@ -14,16 +14,21 @@ option (USE_X86_64 "Use x86_64 arch" ON)
 
 
 file(GLOB ${PROJECT}_SOURCES *.cpp  
-	util/*.cpp 
-	core/*.cpp 
-	gui/*.cpp)  
+#	util/*.cpp
+#	core/*.cpp
+#	gui/*.cpp
+)
 file(GLOB ${PROJECT}_HEADERS *.h *.hpp 
-	util/*.h 
-	core/*.h 
-	gui/*.h)
+#	util/*.h
+#	core/*.h
+#	gui/*.h
+)
 file(GLOB ${PROJECT}_UI *.ui 
-	util/*.ui 
-	gui/*.ui)
+#	util/*.ui
+#	gui/*.ui
+)
+
+
 file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS} )
 
 #### QWT  #####################################
@@ -119,6 +124,11 @@ if(WITH_OPTPP)
     add_definitions( -DWITH_OPTPP )
     list (APPEND LINK newton newmat opt)
 endif(WITH_OPTPP)
+
+
+add_subdirectory (core)
+add_subdirectory (gui)
+add_subdirectory (util)
 
 add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H} ${${PROJECT}_RESOURCES})	
 
