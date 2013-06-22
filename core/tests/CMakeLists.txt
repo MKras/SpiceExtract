@@ -37,7 +37,7 @@ target_link_libraries(${PROJECT}
                       )
 
 
-add_test(tester tester)
+add_test(${PROJECT} ${PROJECT})
 
 
 #enable_testing ()

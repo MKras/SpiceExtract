@@ -12,25 +12,6 @@ option (WITH_GALIB "Use GALib library" OFF)
 option (WITH_OPTPP "Use OPT++ library" OFF)
 option (USE_X86_64 "Use x86_64 arch" ON)
 
-
-file(GLOB ${PROJECT}_SOURCES *.cpp  
-#	util/*.cpp
-#	core/*.cpp
-#	gui/*.cpp
-)
-file(GLOB ${PROJECT}_HEADERS *.h *.hpp 
-#	util/*.h
-#	core/*.h
-#	gui/*.h
-)
-file(GLOB ${PROJECT}_UI *.ui 
-#	util/*.ui
-#	gui/*.ui
-)
-
-
-file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS} )
-
 #### QWT  #####################################
 SET (QWT_DIR $ENV{QWT_DIR})
 set (QWT_INCLUDE_DIR  /usr/local/include /usr/include/qwt5 /usr/include)
@@ -54,6 +35,21 @@ message (STATUS LAPACK_LIB=${LAPACK_LIB})
 endif(NOT LAPACK_LIB)
 ################################################
 SET (BUILD_ROOT $ENV{BUILD_ROOT})
+
+file(GLOB ${PROJECT}_SOURCES *.cpp
+#	util/*.cpp
+#	core/*.cpp
+#	gui/*.cpp
+)
+file(GLOB ${PROJECT}_HEADERS *.h *.hpp
+#	util/*.h
+#	core/*.h
+#	gui/*.h
+)
+file(GLOB ${PROJECT}_UI *.ui ${BUILD_ROOT}/*.ui
+#	util/*.ui
+#	gui/*.ui
+)
 
 ########### Temperary!!!!!!!!!!!!!
 SET (DEBUG ON)
@@ -126,11 +122,18 @@ if(WITH_OPTPP)
 endif(WITH_OPTPP)
 
 
-add_subdirectory (core)
-add_subdirectory (gui)
 add_subdirectory (util)
+add_subdirectory (gui)
+add_subdirectory (core)
+
+
+
+#file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS}  Core GUI Util)
+
 
 add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H} ${${PROJECT}_RESOURCES})	
+
+add_dependencies (${PROJECT} Core GUI Util)
 
 target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} ${LIBF2C} ${QWT_LIB} pthread dl)
 
