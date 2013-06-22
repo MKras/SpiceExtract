@@ -36,20 +36,11 @@ endif(NOT LAPACK_LIB)
 ################################################
 SET (BUILD_ROOT $ENV{BUILD_ROOT})
 
-file(GLOB ${PROJECT}_SOURCES *.cpp
-#	util/*.cpp
-#	core/*.cpp
-#	gui/*.cpp
-)
-file(GLOB ${PROJECT}_HEADERS *.h *.hpp
-#	util/*.h
-#	core/*.h
-#	gui/*.h
-)
-file(GLOB ${PROJECT}_UI *.ui ${BUILD_ROOT}/*.ui
-#	util/*.ui
-#	gui/*.ui
-)
+
+file(GLOB ${PROJECT}_SOURCES *.cpp )
+file(GLOB ${PROJECT}_HEADERS *.h *.hpp )
+file(GLOB ${PROJECT}_UI *.ui ${BUILD_ROOT}/*.ui)
+file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS} ${${PROJECT}_UI} )
 
 ########### Temperary!!!!!!!!!!!!!
 SET (DEBUG ON)
@@ -79,7 +70,7 @@ set (INCLUDES
 include_directories(
 	${INCLUDES}	
 	)
-	
+
 set (RESOURCE_PATH 
 	${CMAKE_SOURCE_DIR}/gui
 	)
@@ -122,20 +113,15 @@ if(WITH_OPTPP)
 endif(WITH_OPTPP)
 
 
+add_subdirectory (core)
 add_subdirectory (util)
 add_subdirectory (gui)
-add_subdirectory (core)
-
-
-
-#file(GLOB ${PROJECT}_SOURCE_LIST ${${PROJECT}_SOURCES} ${${PROJECT}_HEADERS}  Core GUI Util)
-
 
 add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H} ${${PROJECT}_RESOURCES})	
 
 add_dependencies (${PROJECT} Core GUI Util)
 
-target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} ${LIBF2C} ${QWT_LIB} pthread dl)
+target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} ${LIBF2C} ${QWT_LIB} pthread dl Core GUI Util)
 
 set (DEFFINITIONS
 	_REENTRANT
