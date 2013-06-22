@@ -28,7 +28,7 @@ find_package(Boost COMPONENTS system filesystem REQUIRED)
 
 
 find_package(Boost COMPONENTS system filesystem unit_test_framework REQUIRED)
-add_excecutable (${PROJECT} STATIC ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES})
+add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES})
 
 target_link_libraries(${PROJECT}
                       ${Boost_FILESYSTEM_LIBRARY}
