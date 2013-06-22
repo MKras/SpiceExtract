@@ -35,12 +35,12 @@ BOOST_AUTO_TEST_CASE (test1)
     BOOST_CHECK_NO_THROW (copy_file(path/"spicelib.slb",boost::filesystem::current_path()/"spicelib.slb",boost::filesystem3::copy_option::overwrite_if_exists));
     BOOST_CHECK_EQUAL(boost::filesystem3::exists(path/"spicelib.slb"), true);
 
-    std::string spice_lib = "spicelib.slb";
-    BOOST_CHECK_NO_THROW(ngw.load_cir(spice_lib));
+    std::string spice_cir = "idsvds1.1.cir";
+    BOOST_CHECK_NO_THROW(ngw.load_cir(spice_cir));
 
     BOOST_CHECK_NO_THROW( ngw.bg_run());
 
-    ngw.wait_until_simulation_finishes();
+    BOOST_CHECK_NO_THROW( ngw.wait_until_simulation_finishes());
 
     simulation_result_T res = ngw.get_AllVecs(ngw.get_CurPlot());
 
