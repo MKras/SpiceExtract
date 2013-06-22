@@ -14,14 +14,6 @@ include_directories(
 	${CMAKE_SOURCE_DIR}
 	${BUILD_ROOT}/core
 	)
-#add_executable(${PROJECT} ${${PROJECT}_SOURCE_LIST})
-
-#qt4_wrap_cpp (${PROJECT}_MOC_SOURCES ${${PROJECT}_HEADERS})
-#add_library (${PROJECT} STATIC ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES})	
-#set_target_properties(${PROJECT}  PROPERTIES COMPILE_DEFINITIONS "${DEFFINITIONS}")
-
-	
-#target_link_libraries (${PROJECT} ${LINK})
 
 cmake_minimum_required(VERSION 2.8)
 find_package(Boost COMPONENTS system filesystem REQUIRED)
@@ -41,7 +33,6 @@ target_link_libraries(${PROJECT}
 
 
 add_test(${PROJECT} ${PROJECT})
-
 
 #enable_testing ()
 message( STATUS "Building ${PROJECT} finished\n")
