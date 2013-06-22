@@ -7,18 +7,14 @@
 
 BOOST_AUTO_TEST_SUITE (NGWrapper_tests) // name of the test suite is stringtest
 
-BOOST_AUTO_TEST_CASE (test1)
+BOOST_AUTO_TEST_CASE (NGSpiceWrapper_run_test)
 {    
-    std::string s;
-    BOOST_CHECK(s.size() == 0);
-
     NGSpiceWrapper ngw;
     BOOST_CHECK_NO_THROW (ngw.Init_dll_handler());
     std::cout<<" ngw.Init_dll_handler();"<<std::endl;
     BOOST_CHECK_NO_THROW (ngw.Init_handlers());
     std::cout<<" ngw.Init_handlers();"<<std::endl;
     BOOST_CHECK_NO_THROW (ngw.NGngSpice_Init_handle());
-
 
     BOOST_CHECK_EQUAL (boost::filesystem3::exists(boost::filesystem::path(std::string(CMAKE_SOURCE_DIR)+std::string("/resourses/tests_data/ngspice_wrapper_data"))), true);
     boost::filesystem::path path (std::string(CMAKE_SOURCE_DIR)+std::string("/resourses/tests_data/ngspice_wrapper_data"));
@@ -43,7 +39,6 @@ BOOST_AUTO_TEST_CASE (test1)
     BOOST_CHECK_NO_THROW( ngw.wait_until_simulation_finishes());
 
     simulation_result_T res = ngw.get_AllVecs(ngw.get_CurPlot());
-
 }
 
 BOOST_AUTO_TEST_SUITE_END( )
