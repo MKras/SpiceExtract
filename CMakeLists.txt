@@ -114,7 +114,7 @@ endif(WITH_LEVMAR)
 if(WITH_GALIB)
     add_definitions( -DWITH_GALIB )
     list (APPEND LINK ga)
-endif(WITH_LEVMAR)
+endif(WITH_GALIB)
 if(WITH_OPTPP)
     add_definitions( -DWITH_OPTPP )
     list (APPEND LINK newton newmat opt)
@@ -122,10 +122,7 @@ endif(WITH_OPTPP)
 
 add_executable (${PROJECT} ${${PROJECT}_SOURCE_LIST} ${${PROJECT}_MOC_SOURCES} ${${PROJECT}_UIS_H} ${${PROJECT}_RESOURCES})	
 
-target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} ${LIBF2C} ${QWT_LIB})
-
-#target_link_libraries (pthread dl)
-target_link_libraries (pthread)
+target_link_libraries (${PROJECT} ${LINK} ${QT_LIBRARIES} ${LIBF2C} ${QWT_LIB} pthread dl)
 
 set (DEFFINITIONS
 	_REENTRANT
