@@ -36,8 +36,6 @@ struct simulation_result_T
     plots_data_T vec_data;
 };
 
-
-
 class NGSpiceWrapper_Exception : public std::exception
 {
 private:
@@ -48,7 +46,6 @@ public:
    NGSpiceWrapper_Exception(std::string ss);
    ~NGSpiceWrapper_Exception()  throw();
 };
-
 
 class NGSpiceWrapper_Impl;
 typedef boost::shared_ptr<NGSpiceWrapper_Impl> NGSpiceWrapper_ImplPtr;

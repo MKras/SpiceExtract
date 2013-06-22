@@ -11,6 +11,7 @@ option (WITH_LEVMAR "Use LevMar library" OFF)
 option (WITH_GALIB "Use GALib library" OFF)
 option (WITH_OPTPP "Use OPT++ library" OFF)
 option (USE_X86_64 "Use x86_64 arch" ON)
+option (WITH_TEST "Make tests" ON)
 
 #### QWT  #####################################
 SET (QWT_DIR $ENV{QWT_DIR})
@@ -112,6 +113,9 @@ if(WITH_OPTPP)
     list (APPEND LINK newton newmat opt)
 endif(WITH_OPTPP)
 
+if(WITH_TEST)
+    message( STATUS "TESTS will be build\n")
+endif(WITH_TEST)
 
 add_subdirectory (core)
 add_subdirectory (util)
