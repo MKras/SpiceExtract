@@ -27,11 +27,7 @@
 #include "core/sharedspice.h"
 #include <iostream>
 
-#ifndef NO_BG_GUARD_
 bool no_bg = true;
-#define NO_BG_GUARD_
-#endif
-
 bool not_yet = true;
 bool will_unload = false;
 

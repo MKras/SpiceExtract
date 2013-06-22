@@ -117,7 +117,7 @@ if(WITH_TEST)
     message( STATUS "TESTS will be build\n")
 endif(WITH_TEST)
 
-add_definitions(-DCMAKE_SOURCE_DIR=${CMAKE_SOURCE_DIR})
+add_definitions(-DCMAKE_SOURCE_DIR="${CMAKE_SOURCE_DIR}")
 
 add_subdirectory (core)
 add_subdirectory (util)
