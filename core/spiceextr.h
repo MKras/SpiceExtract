@@ -260,6 +260,7 @@ private:
         xyData GetSimulationResults_xy(simulation_result_T sp_sim);
         xyData GetExperimentResults_xy(string sp_exp);
         bool NGSpiceOut(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy);
+        bool NGSpiceOut(simulation_result_T sp_sim, QString first, QString second, xyData *res_xy);
         bool GNUcapOut(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy);
         bool Spectre_psfascii_Out(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy);
 
@@ -316,7 +317,15 @@ public:
 
 };
 
-
+class SpiceExtr_Exception : public std::exception
+{
+private:
+   std::string s_;
+public:
+   const char* what() const throw();
+   SpiceExtr_Exception(std::string s);
+   ~SpiceExtr_Exception()  throw();
+};
 
 #endif /* OPTIONS_H_ */
 

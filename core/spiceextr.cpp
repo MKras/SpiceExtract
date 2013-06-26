@@ -748,7 +748,7 @@ SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path){
     NGWrapper_.load_cir(spice_path)
 
 
-    exec=spice_path+" "+tmpspicein+" > "+tmpspiceout;
+    //exec=spice_path+" "+tmpspicein+" > "+tmpspiceout;
     xyData res;
 
     //sys_res=system(exec.c_str());
@@ -756,9 +756,9 @@ SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path){
      NGWrapper_.bg_run();
      NGWrapper_.wait_until_simulation_finishes();
 
-     simulation_result_T res = ngw.get_AllVecs(ngw.get_CurPlot());
+     simulation_result_T res_vec = ngw.get_AllVecs(ngw.get_CurPlot());
 
-                    xyData tres=GetSimulationResults_xy(tmpspiceout);
+                    xyData tres=GetSimulationResults_xy(res_vec);
                     //qDebug()<<"tresSize = "<<tres.y.size()<<" : "<<"x = "<<tres.x.at(0)<<" y = "<<tres.y.at(0);
                     if (tres.y.size()==1){
                         res.x.push_back(tval);
@@ -904,6 +904,21 @@ vector<double> SpiceExtr::GetAllSimulationResults(){
             }
 
         return allres;
+}
+
+bool SpiceExtr::NGSpiceOut(simulation_result_T sp_sim, QString first, QString second, xyData *res_xy){
+    if( (sp_sim.end() == sp_sim.find(first))
+            && (sp_sim.end() = sp_sim.find(second)) ){
+
+        std::string error = "Can't find curves for compare. Only the next ";
+        for (simulation_result_T::iterator it = sp_sim.begin(); it != sp_sim.end(); it++){
+            error = error + it->first+" ";
+        }
+        error = error + " avalible";
+        throw SpiceExtr_Exception("Not supported simulator");
+    }
+    return false;
+
 }
 
 bool  SpiceExtr::NGSpiceOut(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy){
@@ -1235,7 +1250,26 @@ bool  SpiceExtr::Spectre_psfascii_Out(QTextStream *stream, QTextStream *tmpstrea
 }
 
 SpiceExtr::xyData SpiceExtr::GetSimulationResults_xy(simulation_result_T sp_sim){
+    QStringList pars = QString::fromStdString(out_pars).split(";");//, QString::SkipEmptyParts);
 
+    if(pars.size()==2){
+        first=QString(pars.at(0));
+        second=QString(pars.at(1));
+    }else{
+        qDebug()<<"GetSimulationResults_xy first Second parce erroe Set to Def.";
+        std::string error;
+        error = "Can't parce simulated data for compare: "+std::string(out_pars);
+        throw SpiceExtr_Exception(error);
+    };
+
+    xyData res_xy;
+
+    if(simulator==NGSpice){//NGSpice
+        NGSpiceOut(&sp_sim,  first, second, &res_xy);
+        qDebug()<<"NGSpiceOut";
+    }else throw SpiceExtr_Exception("Not supported simulator");
+
+    return res_xy;
 };
 
 SpiceExtr::xyData SpiceExtr::GetSimulationResults_xy(string sp_sim){        
@@ -2217,7 +2251,12 @@ void SpiceExtr::MultiRun(int dim, double* x, double& fx, int& result){
     }
 }
 
-
 void SpiceExtr::kill(){
     stop=true;
 }
+
+//NGSpiceWrapper_Exception/////////////////////////////////
+const char* SpiceExtr_Exception::what() const throw() { return s_.c_str(); }
+SpiceExtr_Exception::SpiceExtr_Exception(std::string s) : s_(s) {}
+SpiceExtr_Exception::~SpiceExtr_Exception()  throw() {}
+/////////////////////////////////NGSpiceWrapper_Exception
