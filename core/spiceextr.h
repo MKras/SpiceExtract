@@ -20,6 +20,7 @@
 #include <fstream>
 #include <sstream>
 #include <stdlib.h>// for MAX_PATH
+#include <memory>
 //#include "mymath.h"
 #include "../util/globals.h"
 #include <QProcess>
@@ -250,11 +251,13 @@ private:
         void setSpiceInputValues(string spicelib);
         double RunSimulation();
         xyData runNGSpice(string spice_path, string tmpspicein, string tmpspiceout);
+        xyData runNGSpice(string spice_path);
         //vector<double> GetSimulationResults(string spiceout);
         //vector<double> GetSimulationResults(string spiceout);
         //vector<double> GetExperimentResults(string spiceout);
 
         xyData GetSimulationResults_xy(string sp_sim);
+        xyData GetSimulationResults_xy(simulation_result_T sp_sim);
         xyData GetExperimentResults_xy(string sp_exp);
         bool NGSpiceOut(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy);
         bool GNUcapOut(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy);
@@ -302,7 +305,7 @@ private slots:
     //void toBeKilled();
 
 private:
-    NGSpiceWrapper *NGWrapper_;
+    boost::shared_ptr<NGSpiceWrapper> NGWrapper_;
 
 public:
 

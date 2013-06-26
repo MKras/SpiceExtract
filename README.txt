@@ -18,6 +18,8 @@ LevMar - http://www.ics.forth.gr/~lourakis/levmar/
 
 … and also you will need libf2c.a (in /usr/lib/libf2c.a) library
 
+- build NGSPICE with shared library (*.so)(experemental) or binary. 
+
 Building with presetted external libraries or only with internal optimization methods is default.
 
 The main unresolved problem is obtaining of CV characteristics for BSIM (and other libraries).

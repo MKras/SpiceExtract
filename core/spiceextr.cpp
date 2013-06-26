@@ -66,7 +66,8 @@ stop=false;
         simulator = NGSpice;
 
         //Init NGwrapper
-        NGWrapper_ = new NGSpiceWrapper();
+        NGSpiceWrapper *NGWrapper_p = new NGSpiceWrapper();
+        NGWrapper_ = boost::shared_ptr<NGSpiceWrapper>(NGWrapper_p);
         NGWrapper_->Init_dll_handler();
         NGWrapper_->Init_handlers();
         NGWrapper_->NGngSpice_Init_handle();
@@ -740,6 +741,75 @@ SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, st
             return res;
 
 }
+
+SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path){
+    qDebug()<<"runNGSpice or GNUCap";
+
+    NGWrapper_.load_cir(spice_path)
+
+
+    exec=spice_path+" "+tmpspicein+" > "+tmpspiceout;
+    xyData res;
+
+    //sys_res=system(exec.c_str());
+
+     NGWrapper_.bg_run();
+     NGWrapper_.wait_until_simulation_finishes();
+
+     simulation_result_T res = ngw.get_AllVecs(ngw.get_CurPlot());
+
+                    xyData tres=GetSimulationResults_xy(tmpspiceout);
+                    //qDebug()<<"tresSize = "<<tres.y.size()<<" : "<<"x = "<<tres.x.at(0)<<" y = "<<tres.y.at(0);
+                    if (tres.y.size()==1){
+                        res.x.push_back(tval);
+                        res.y.push_back(tres.y.at(0));
+                    }else if(tres.y.size()>1){
+                        for (size_t i = 0; i < res.x.size(); ++i) {
+                            res.x.push_back(tres.x.at(i));
+                            res.y.push_back(tres.y.at(i));
+                        }
+                    }
+                    //qDebug()<<"res = "<<QString("%1").arg(tval)<<" "<<QString("%1").arg(tres.y.at(0));
+                    //возвращаем исходнай файл (т.е. параметр уже был заменен числом)
+                    cir.setFileName(QString::fromStdString("./"+tmpspicein));
+                            if(cir.open(QIODevice::ReadWrite)){
+                                QTextStream stream( &cir );
+                                for (int i = 0; i < cir_init.size(); ++i) {
+                                    stream<<cir_init.at(i)<<"\n";
+                                }
+                        }
+                            cir.close();
+                            cir_init.clear();
+
+                    start=start+step;
+                    tval=tval+step;
+
+                }
+
+                //сохраняем результат параметрического анализа в файл
+                qDebug()<<"tmpspiceout = "<< QString::fromStdString(tmpspiceout);
+                cir.setFileName(QString::fromStdString("./"+tmpspiceout));
+                        if(cir.open(QIODevice::ReadWrite)){
+                            QTextStream stream( &cir );
+                            for (size_t i = 0; i < res.x.size(); ++i) {
+                                stream<<QString("%1").arg(res.x.at(i))<<" "<<QString("%1").arg(res.y.at(i))<<"\n";
+                                //qDebug()<<QString("%1").arg(res.x.at(i))<<" "<<QString("%1").arg(res.y.at(i));
+                            }
+                    }
+                        cir.close();
+
+            }else {
+                int sys_res;
+                sys_res=system(exec.c_str());
+                return GetSimulationResults_xy(tmpspiceout);
+
+            }
+
+            //sys_res=system(exec.c_str());
+
+            return res;
+
+}
 double SpiceExtr::RunSimulation(){    
         char *cp=get_current_dir_name ();
 
@@ -1163,6 +1233,10 @@ bool  SpiceExtr::Spectre_psfascii_Out(QTextStream *stream, QTextStream *tmpstrea
     }   return true;
 
 }
+
+SpiceExtr::xyData SpiceExtr::GetSimulationResults_xy(simulation_result_T sp_sim){
+
+};
 
 SpiceExtr::xyData SpiceExtr::GetSimulationResults_xy(string sp_sim){        
         //string line,file, tmpfile;
