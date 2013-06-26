@@ -479,6 +479,21 @@ public:
     }
 
     void run_simulation();
+
+    bool NGSpiceOut(simulation_result_T sp_sim, std::string first_, std::string second_, xyData *res_xy){
+
+        if( (sp_sim.vec_data.end() == sp_sim.vec_data.find(first_))
+                && (sp_sim.vec_data.end() == sp_sim.vec_data.find(first_)) ){
+
+            std::string error = "Can't find curves for compare. Only the next ";
+            for (plots_data_T::iterator it = sp_sim.vec_data.begin(); it != sp_sim.vec_data.end(); it++){
+                error = error + it->first+" ";
+            }
+            error = error + " avalible";
+            throw NGSpiceWrapper_Exception("Not supported simulator");
+        }
+        return false;
+    }
 };
 
 NGSpiceWrapper::NGSpiceWrapper():
@@ -554,6 +569,10 @@ void NGSpiceWrapper::wait_until_simulation_finishes(){
 
 void NGSpiceWrapper::stop_waiting_until_simulation_finishes(){
     return NGSpiceWrapper_Impl_->stop_waiting_until_simulation_finishes();
+}
+
+bool NGSpiceWrapper::NGSpiceOut(simulation_result_T sp_sim, std::string first, std::string second, xyData *res_xy){
+    return NGSpiceWrapper_Impl_->NGSpiceOut(sp_sim, first,  second, res_xy);
 }
 
 // example

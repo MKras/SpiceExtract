@@ -27,6 +27,11 @@ typedef void *  funptr_t;
 #include <stdexcept>
 #include <boost/shared_ptr.hpp>
 
+struct xyData{
+        std::vector <double> x;
+        std::vector <double> y;
+};
+
 typedef std::vector<float> plot_data_T;
 typedef  std::map < std::string, plot_data_T > plots_data_T;
 
@@ -108,6 +113,8 @@ public:
     NGSpiceWrapper();
 
     void run_simulation();
+    bool NGSpiceOut(simulation_result_T sp_sim, std::string first, std::string second, xyData *res_xy);
+
 private:
     NGSpiceWrapper_Impl *NGSpiceWrapper_Impl_;
     //NGSpiceWrapper_ImplPtr NGSpiceWrapper_Impl_;

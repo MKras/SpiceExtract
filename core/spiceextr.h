@@ -64,6 +64,10 @@ using namespace OPTPP;
 
 
 using namespace std;
+//struct xyData{
+//        vector <double> x;
+//        vector <double> y;
+//};
 //class SpiceExtr: public QProcess {
 class SpiceExtr: public QObject {
      Q_OBJECT
@@ -198,10 +202,6 @@ private:
         double LM_JacobianStep;
         int LM_iter;
         int itercount;
-        struct xyData{
-                vector <double> x;
-                vector <double> y;
-        };
 
         //A and B parameters to convert parameters in range [-1; 1]
         double *a, *b;
@@ -279,7 +279,7 @@ private:
         void getParams(curve *cur);
         xyData GSL_approximate(xyData *sim, xyData* exp);
         double interpolate(int init, std::vector<double> x, std::vector<double> y, double x_val);
-        SpiceExtr::xyData interpolation(xyData *sim, xyData *exp);
+        xyData interpolation(xyData *sim, xyData *exp);
         //GA
         void setGAalg(int ga);
         int getGAalg();

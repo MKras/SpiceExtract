@@ -586,7 +586,7 @@ int SpiceExtr::CountExperimentPoints(){
         return ExperimentPoints;
 };
 
-SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, string tmpspiceout){
+xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, string tmpspiceout){
     qDebug()<<"runNGSpice or GNUCap";
 
     string exec="";
@@ -742,7 +742,7 @@ SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, st
 
 }
 
-SpiceExtr::xyData SpiceExtr::runNGSpice(string spice_path){
+xyData SpiceExtr::runNGSpice(string spice_path){
     qDebug()<<"runNGSpice or GNUCap";
 
     NGWrapper_->load_cir(spice_path);
@@ -858,23 +858,10 @@ vector<double> SpiceExtr::GetAllSimulationResults(){
         return allres;
 }
 
-bool SpiceExtr::NGSpiceOut(simulation_result_T sp_sim, QString first, QString second, xyData *res_xy){
-
+bool SpiceExtr::NGSpiceOut(simulation_result_T sp_sim, QString first, QString second, xyData *res_xy){    
     std::string first_ = std::string(first.toStdString());
     std::string second_ = std::string(second.toStdString());
-
-    if( (sp_sim.vec_data.end() == sp_sim.vec_data.find(first_))
-            && (sp_sim.vec_data.end() == sp_sim.vec_data.find(first_)) ){
-
-        std::string error = "Can't find curves for compare. Only the next ";
-        for (plots_data_T::iterator it = sp_sim.vec_data.begin(); it != sp_sim.vec_data.end(); it++){
-            error = error + it->first+" ";
-        }
-        error = error + " avalible";
-        throw SpiceExtr_Exception("Not supported simulator");
-    }
-    return false;
-
+    return NGWrapper_->NGSpiceOut(sp_sim, first_, second_, res_xy);
 }
 
 bool  SpiceExtr::NGSpiceOut(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy){
@@ -1205,7 +1192,7 @@ bool  SpiceExtr::Spectre_psfascii_Out(QTextStream *stream, QTextStream *tmpstrea
 
 }
 
-SpiceExtr::xyData SpiceExtr::GetSimulationResults_xy(simulation_result_T sp_sim){
+xyData SpiceExtr::GetSimulationResults_xy(simulation_result_T sp_sim){
     QStringList pars = QString::fromStdString(out_pars).split(";");//, QString::SkipEmptyParts);
 
     QString first, second;
@@ -1230,7 +1217,7 @@ SpiceExtr::xyData SpiceExtr::GetSimulationResults_xy(simulation_result_T sp_sim)
     return res_xy;
 }
 
-SpiceExtr::xyData SpiceExtr::GetSimulationResults_xy(string sp_sim){        
+xyData SpiceExtr::GetSimulationResults_xy(string sp_sim){
         //string line,file, tmpfile;
         xyData res_xy;
         qDebug()<<"GetSimulationResults_xy";        
@@ -1340,7 +1327,7 @@ vector<double> SpiceExtr::GetAllExperimentResults(){
         return allres;
 }
 
-SpiceExtr::xyData SpiceExtr::GetExperimentResults_xy(string sp_exp){
+xyData SpiceExtr::GetExperimentResults_xy(string sp_exp){
 
     xyData res;
     qDebug()<<"GetExperimentResults_xy";
@@ -1437,7 +1424,7 @@ if(sim.y.size()==zero){
 return res_x;
 }
 
-SpiceExtr::xyData SpiceExtr::GSL_approximate(xyData *sim, xyData *exp){
+xyData SpiceExtr::GSL_approximate(xyData *sim, xyData *exp){
     size_t size = 0, i=0;
     xyData simOut;
     if(exp->y.size()>sim->y.size()) size=sim->y.size();
@@ -1605,7 +1592,7 @@ double SpiceExtr::interpolate(int init, std::vector<double> x, std::vector<doubl
 
 //линейная интерполяция данных (на случай разного количества экспериментальных
 //и моделируемых точек)
-SpiceExtr::xyData SpiceExtr::interpolation(xyData *sim, xyData *exp){
+xyData SpiceExtr::interpolation(xyData *sim, xyData *exp){
     xyData simOut;
 
     size_t i=0, size=0;
