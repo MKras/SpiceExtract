@@ -39,6 +39,44 @@ BOOST_AUTO_TEST_CASE (NGSpiceWrapper_run_test)
     BOOST_CHECK_NO_THROW( ngw.wait_until_simulation_finishes());
 
     simulation_result_T res = ngw.get_AllVecs(ngw.get_CurPlot());
+
+    xyData xy;
+//    std::cout <<"Cur plot "<< res.curplot<<std::endl;
+//    for (plots_data_T::iterator it = res.vec_data.begin(); it != res.vec_data.end(); it++){
+//        std::cout<<it->first<<std::endl;
+//    };
+    BOOST_CHECK_EQUAL(res.vec_data.end() != res.vec_data.find("vd#branch"), true);
+    BOOST_CHECK_EQUAL(res.vec_data.end() != res.vec_data.find("v-sweep"), true);
+    plots_data_T::iterator y = res.vec_data.find("vd#branch");
+    plots_data_T::iterator x = res.vec_data.find("v-sweep");
+
+    //std::cout<< "X\tY"<<std::endl;
+    for(int i = 0; i < x->second.size(); i++){
+        //std::cout<<x->second[i]<<" "<<y->second[i]<<std::endl;
+        BOOST_CHECK_NO_THROW( xy.x.push_back(x->second[i]) );
+        BOOST_CHECK_NO_THROW( xy.y.push_back(y->second[i]) );
+    }
+
+    xyData xy_compare;
+    ngw.NGSpiceOut(res, "v-sweep", "vd#branch", &xy_compare);
+
+    for(int i = 0; i < xy_compare.x.size(); i++){
+        //std::cout<<xy_compare.x[i]<<" "<<xy_compare.y[i]<<std::endl;
+        BOOST_CHECK_EQUAL( xy_compare.x[i], xy.x[i] );
+        BOOST_CHECK_EQUAL( xy_compare.y[i], xy.y[i] );
+    }
+
+    bool catched = false;
+
+    try{
+        ngw.NGSpiceOut(res, "v-sweep", "vd#branc", &xy_compare);
+    }catch(NGSpiceWrapper_Exception &e){
+        std::cout<<e.what()<<std::endl;
+        catched = true;
+    }
+
+    BOOST_CHECK_EQUAL(catched, true);
+
 }
 
 BOOST_AUTO_TEST_SUITE_END( )

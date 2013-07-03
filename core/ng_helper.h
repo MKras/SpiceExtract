@@ -32,7 +32,7 @@ struct xyData{
         std::vector <double> y;
 };
 
-typedef std::vector<float> plot_data_T;
+typedef std::vector<double> plot_data_T;
 typedef  std::map < std::string, plot_data_T > plots_data_T;
 
 struct simulation_result_T

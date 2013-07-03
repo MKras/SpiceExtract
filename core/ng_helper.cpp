@@ -114,7 +114,7 @@ ng_exit(int exitstatus, bool immediate, bool quitexit, void* userdata)
 
 }
 
-/* Callback function called from bg thre        ad in ngspice once per accepted data point */
+/* Callback function called from bg thread in ngspice once per accepted data point */
 int
 ng_data(pvecvaluesall vdata, int numvecs, void* userdata)
 {
@@ -483,16 +483,27 @@ public:
     bool NGSpiceOut(simulation_result_T sp_sim, std::string first_, std::string second_, xyData *res_xy){
 
         if( (sp_sim.vec_data.end() == sp_sim.vec_data.find(first_))
-                && (sp_sim.vec_data.end() == sp_sim.vec_data.find(first_)) ){
+                || (sp_sim.vec_data.end() == sp_sim.vec_data.find(second_)) ){
 
-            std::string error = "Can't find curves for compare. Only the next ";
+            std::string wrong_curve;
+            if(sp_sim.vec_data.end() == sp_sim.vec_data.find(first_))
+                wrong_curve = first_;
+            else
+                wrong_curve = second_;
+            std::string error = "Can't find curve "+wrong_curve+" for compare. Only the next ";
             for (plots_data_T::iterator it = sp_sim.vec_data.begin(); it != sp_sim.vec_data.end(); it++){
                 error = error + it->first+" ";
             }
             error = error + " avalible";
-            throw NGSpiceWrapper_Exception("Not supported simulator");
+            throw NGSpiceWrapper_Exception(error);
         }
-        return false;
+        for(plot_data_T::iterator it =  sp_sim.vec_data[first_].begin(); it != sp_sim.vec_data[first_].end(); it++){
+            res_xy->x.push_back(*it);
+        }
+        for(plot_data_T::iterator it =  sp_sim.vec_data[second_].begin(); it != sp_sim.vec_data[second_].end(); it++){
+            res_xy->y.push_back(*it);
+        }
+        return true;
     }
 };
 

@@ -64,10 +64,7 @@ using namespace OPTPP;
 
 
 using namespace std;
-//struct xyData{
-//        vector <double> x;
-//        vector <double> y;
-//};
+
 //class SpiceExtr: public QProcess {
 class SpiceExtr: public QObject {
      Q_OBJECT
