@@ -62,7 +62,7 @@ stop=false;
         setLambda(1e-6);
         setErrorFunction(1);
         itercount=0;
-        out_pars = "{1},{2}";        
+        //out_pars = "{1},{2}";
         simulator = NGSpice;
 
         //Init NGwrapper
@@ -586,162 +586,6 @@ int SpiceExtr::CountExperimentPoints(){
         return ExperimentPoints;
 };
 
-xyData SpiceExtr::runNGSpice(string spice_path, string tmpspicein, string tmpspiceout){
-    qDebug()<<"runNGSpice or GNUCap";
-
-    string exec="";
-    exec=spice_path+" "+tmpspicein+" > "+tmpspiceout;
-    xyData res;
-
-//my ngspice preprocessor
-    //parce cir file and find directive "*@parametric varname = valStart valStop valStep"
-    QRegExp rx("\\*\\@parametric\\s*([\\d\\w]*)\\s*=\\s*([+-]?\\d+\\\.?\\d*[eE]?[+-]?\\d*)\\s*([+-]?\\d+\\\.?\\d*[eE]?[+-]?\\d*)\\s*([+-]?\\d+\\\.?\\d*[eE]?[+-]?\\d*).*");
-    //QRegExpValidator v(rx, 0);
-    QString s;
-    size_t pos = 0;
-    bool parametric=false;
-    QString param;
-    double start,stop,step;
-    QFile cir(QString::fromStdString("./"+tmpspicein));
-            if(cir.open(QIODevice::ReadOnly)){
-                QTextStream stream( &cir );
-                    QString line;
-                    while(!stream.atEnd()){
-                        line = stream.readLine();
-
-                        int pos = rx.indexIn(line);
-                        if (pos > -1) {
-                            //qDebug()<<line;
-                            //allres.push_back(rx.cap(2).toDouble());
-                            param = rx.cap(1);
-                            start = rx.cap(2).toDouble();
-                            stop = rx.cap(3).toDouble();
-                            step = rx.cap(4).toDouble();
-                            //qDebug()<<param<<" "<<QString("%1").arg(start)<<" "<<
-                              //      QString("%1").arg(stop)<<" "<<
-                              //      QString("%1").arg(step);
-                            //qDebug()<<rx.cap(1)<<" "<<rx.cap(2)<<" "<<
-                              //      rx.cap(3)<<" "<<
-                              //      rx.cap(4);
-                            parametric = true;
-                            //break;
-                        }
-                    }
-                }
-            cir.close();
-
-            if(parametric){
-                double tval=start;
-                QVector <QString> cir_init;
-                //if(fabs(start)<=fabs(stop)) qDebug()<<"start<=stop = "<<QString("%1").arg(start)<<" "<<QString("%1").arg(stop);
-                while(tval<=stop){
-                    //qDebug()<<QString("%1").arg(start)<<" "<<QString("%1").arg(stop)<<" param = "<<param;
-
-                    QRegExp rx("(.*)(\\$"+param+")(.*)");
-                    QFile tmp(QString::fromStdString("./"+tmpspicein+"_tmp"));
-                    QFile cir(QString::fromStdString("./"+tmpspicein));
-                            if(cir.open(QIODevice::ReadOnly)){
-                            if(tmp.open(QIODevice::ReadWrite)){
-                                QTextStream stream( &cir );
-                                QTextStream tmpstream( &tmp );
-                                QString line;
-                                while(!stream.atEnd()){
-                                    line = stream.readLine();
-                                    cir_init.append(line);
-
-                                    //qDebug()<<line;
-                                    int pos = rx.indexIn(line);
-                                    if (pos > -1) {
-
-                                        //qDebug()<<line;
-                                        qDebug()<<rx.cap(1)+QString("%1").arg(tval)+rx.cap(3);
-                                        line=rx.cap(1)+QString("%1").arg(tval)+rx.cap(3);
-                                    };
-                                    tmpstream<<line<<"\n";
-                                    //qDebug()<<line;
-
-                                }//else tmpstream<<line
-                                    //qDebug()<<"first="<<first<<" second="<<second;
-
-                    }else{
-                            cerr<<"Can't open file for GetSimulationResults ";
-                    }
-                    }else{
-                            cerr<<"Can't open file for GetSimulationResults ";
-                    };
-
-                    cir.close();
-                    tmp.close();
-
-                    //sim.remove();
-                    cir.remove(QString::fromStdString("./"+tmpspicein+"_log"));
-                    cir.copy(QString::fromStdString("./"+tmpspicein),QString::fromStdString("./"+tmpspicein+"_log"));
-                    cir.remove(QString::fromStdString("./"+tmpspicein));
-
-                    if(tmp.rename(QString::fromStdString("./"+tmpspicein+"_tmp"),QString::fromStdString("./"+tmpspicein))){
-                    }else{
-                        qDebug()<<"GetSimulationResults_xy: Error file"<<QString::fromStdString("./"+tmpspicein+"_tmp")<<"renaming failed\n";
-
-                            exit(0);
-                   }
-
-                    int sys_res;
-
-                    sys_res=system(exec.c_str());
-
-                    xyData tres=GetSimulationResults_xy(tmpspiceout);
-                    //qDebug()<<"tresSize = "<<tres.y.size()<<" : "<<"x = "<<tres.x.at(0)<<" y = "<<tres.y.at(0);
-                    if (tres.y.size()==1){
-                        res.x.push_back(tval);
-                        res.y.push_back(tres.y.at(0));
-                    }else if(tres.y.size()>1){
-                        for (size_t i = 0; i < res.x.size(); ++i) {
-                            res.x.push_back(tres.x.at(i));
-                            res.y.push_back(tres.y.at(i));
-                        }
-                    }
-                    //qDebug()<<"res = "<<QString("%1").arg(tval)<<" "<<QString("%1").arg(tres.y.at(0));
-                    //возвращаем исходнай файл (т.е. параметр уже был заменен числом)
-                    cir.setFileName(QString::fromStdString("./"+tmpspicein));
-                            if(cir.open(QIODevice::ReadWrite)){
-                                QTextStream stream( &cir );
-                                for (int i = 0; i < cir_init.size(); ++i) {
-                                    stream<<cir_init.at(i)<<"\n";
-                                }
-                        }
-                            cir.close();
-                            cir_init.clear();
-
-                    start=start+step;
-                    tval=tval+step;
-
-                }
-
-                //сохраняем результат параметрического анализа в файл
-                qDebug()<<"tmpspiceout = "<< QString::fromStdString(tmpspiceout);
-                cir.setFileName(QString::fromStdString("./"+tmpspiceout));
-                        if(cir.open(QIODevice::ReadWrite)){
-                            QTextStream stream( &cir );
-                            for (size_t i = 0; i < res.x.size(); ++i) {
-                                stream<<QString("%1").arg(res.x.at(i))<<" "<<QString("%1").arg(res.y.at(i))<<"\n";
-                                //qDebug()<<QString("%1").arg(res.x.at(i))<<" "<<QString("%1").arg(res.y.at(i));
-                            }
-                    }
-                        cir.close();
-
-            }else {
-                int sys_res;
-                sys_res=system(exec.c_str());
-                return GetSimulationResults_xy(tmpspiceout);
-
-            }
-
-            //sys_res=system(exec.c_str());
-
-            return res;
-
-}
-
 xyData SpiceExtr::runNGSpice(string spice_path){
     qDebug()<<"runNGSpice or GNUCap";
 
@@ -801,19 +645,12 @@ double SpiceExtr::RunSimulation(){
 
                     //runNGSpice(spice_path, tmpspicein, tmpspiceout);
                     qDebug()<<"before ReStmp["<<i<<"]"<<" "<<QString::fromStdString(exec);
-                    res=res+CompareCurves(runNGSpice(spice_path, tmpspicein, tmpspiceout),GetExperimentResults_xy(tmpspiceexp), tmpspiceout, tmpspiceexp);
-                    qDebug()<<"piceExtr::RunSimulation ReStmp["<<i<<"] ="<<res;
-
-                }
-
-                if(simulator==Spectre){//Spectre (Cadence)
-                    exec=spice_path+" "+tmpspicein;
-                    sys_res=system(exec.c_str());
-                    qDebug()<<"before ReStmp["<<i<<"]"<<" "<<QString::fromStdString(exec);
-                    res=res+CompareCurves(GetSimulationResults_xy(tmpspiceout),GetExperimentResults_xy(tmpspiceexp), tmpspiceout, tmpspiceexp);
+                    res=res+CompareCurves(runNGSpice(spice_path),GetExperimentResults_xy(tmpspiceexp), tmpspiceout, tmpspiceexp);
                     qDebug()<<"piceExtr::RunSimulation ReStmp["<<i<<"] ="<<res;
                 }
-
+                else {
+                    SpiceExtr_Exception("Unknown simulator");
+                }
         }
         chdir(cp);        
         res=res/spicein.size();        
@@ -858,10 +695,8 @@ vector<double> SpiceExtr::GetAllSimulationResults(){
         return allres;
 }
 
-bool SpiceExtr::NGSpiceOut(simulation_result_T sp_sim, QString first, QString second, xyData *res_xy){    
-    std::string first_ = std::string(first.toStdString());
-    std::string second_ = std::string(second.toStdString());
-    return NGWrapper_->NGSpiceOut(sp_sim, first_, second_, res_xy);
+bool SpiceExtr::NGSpiceOut(simulation_result_T sp_sim, const string first, const string second, xyData *res_xy){
+    return NGWrapper_->NGSpiceOut(sp_sim, first, second, res_xy);
 }
 
 bool  SpiceExtr::NGSpiceOut(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy){
@@ -1193,106 +1028,23 @@ bool  SpiceExtr::Spectre_psfascii_Out(QTextStream *stream, QTextStream *tmpstrea
 }
 
 xyData SpiceExtr::GetSimulationResults_xy(simulation_result_T sp_sim){
-    QStringList pars = QString::fromStdString(out_pars).split(";");//, QString::SkipEmptyParts);
 
-    QString first, second;
-
-    if(pars.size()==2){
-        first=QString(pars.at(0));
-        second=QString(pars.at(1));
-    }else{
+    if( (0 == out_pars.pasrse_x.length()) && (0 == out_pars.pasrse_y.length()) ){
         qDebug()<<"GetSimulationResults_xy first Second parce erroe Set to Def.";
         std::string error;
-        error = "Can't parce simulated data for compare: "+std::string(out_pars);
+        error = "Can't parce simulated data for compare: "+std::string(out_pars.pasrse_x)+" "+std::string(out_pars.pasrse_y);
         throw SpiceExtr_Exception(error);
     };
 
     xyData res_xy;
 
     if(simulator==NGSpice){//NGSpice
-        NGSpiceOut(sp_sim,  first, second, &res_xy);
+        NGSpiceOut(sp_sim,  out_pars.pasrse_x, out_pars.pasrse_y, &res_xy);
         qDebug()<<"NGSpiceOut";
     }else throw SpiceExtr_Exception("Not supported simulator");
 
     return res_xy;
 }
-
-xyData SpiceExtr::GetSimulationResults_xy(string sp_sim){
-        //string line,file, tmpfile;
-        xyData res_xy;
-        qDebug()<<"GetSimulationResults_xy";        
-
-        //парсим out_pars, чтобы узнать какие колонки вырывать
-        //int first, second;
-        QString first, second;
-
-        //qDebug()<<QString::fromStdString(out_pars);
-        QStringList pars = QString::fromStdString(out_pars).split(";");//, QString::SkipEmptyParts);
-
-        if(pars.size()==2){
-            first=QString(pars.at(0));
-            second=QString(pars.at(1));
-        }else{
-            qDebug()<<"GetSimulationResults_xy first Second parce erroe Set to Def.";
-            first="{1}";
-            second="{2}";
-        };
-
-
-
-        QFile tmp(QString::fromStdString("./"+sp_sim+"_tmp"));
-        QFile sim(QString::fromStdString("./"+sp_sim));
-                if(sim.open(QIODevice::ReadOnly)){
-                if(tmp.open(QIODevice::ReadWrite)){
-                    QTextStream stream( &sim );
-                    QTextStream tmpstream( &tmp );
-
-
-
-                    if(simulator==NGSpice){//NGSpice
-                        NGSpiceOut(&stream, &tmpstream,  first, second, &res_xy);
-                        qDebug()<<"NGSpiceOut";
-                    }
-                    if(simulator==Spectre){//Spectre
-                        Spectre_psfascii_Out(&stream, &tmpstream,  first, second, &res_xy);
-                        qDebug()<<"Spectre_psfascii_Out";
-                    }
-                    if(simulator==GNUCap){//GNUcap
-                        GNUcapOut(&stream, &tmpstream,  first, second, &res_xy);
-                        qDebug()<<"GNUCapOut";
-                    }
-
-                        //qDebug()<<"first="<<first<<" second="<<second;
-
-        }else{
-                cerr<<"Can't open file for GetSimulationResults ";
-        }
-        }else{
-                cerr<<"Can't open file for GetSimulationResults ";
-        };
-
-        sim.close();
-        tmp.close();
-
-        //sim.remove();
-        sim.remove(QString::fromStdString("./"+sp_sim+"_log"));
-        sim.copy(QString::fromStdString("./"+sp_sim),QString::fromStdString("./"+sp_sim+"_log"));
-        sim.remove(QString::fromStdString("./"+sp_sim));
-
-        if(tmp.rename(QString::fromStdString("./"+sp_sim+"_tmp"),QString::fromStdString("./"+sp_sim))){
-        }else{
-            qDebug()<<"GetSimulationResults_xy: Error file"<<QString::fromStdString("./"+sp_sim+"_tmp")<<"renaming failed\n";
-
-                exit(0);
-       }
-
-        qDebug()<<"size = "<<res_xy.y.size();
-        qDebug()<<"SpiceExtr::GetSimulationResults_xy(string sp_sim) finished";
-        return res_xy;
-};
-
-
-
 
 vector<double> SpiceExtr::GetAllExperimentResults(){
         vector <double> allres;

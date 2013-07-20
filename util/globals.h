@@ -9,7 +9,10 @@
 
 using namespace std;
 
-
+struct OutParse_s{
+    string pasrse_x;
+    string pasrse_y;
+};
 
 struct curve{
         vector<string>  inFile;
@@ -30,7 +33,7 @@ struct curve{
         QModelIndex idx;
         //curve
         int ErrorFunction;//=2;
-        string OutParse;//="{1};{2}";
+        OutParse_s OutParse;
 
         //global
         string  spice;//="spice -b";

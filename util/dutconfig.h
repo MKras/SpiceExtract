@@ -59,9 +59,16 @@ private:
     QDomNode config;
     //QDomNode modelpath;
     //QDomElement config;
+};
 
-
-
+class DUTconfig_Exception : public std::exception
+{
+private:
+   std::string s_;
+public:
+   const char* what() const throw();
+   DUTconfig_Exception(std::string s);
+   ~DUTconfig_Exception()  throw();
 };
 
 #endif // DUTCONFIG_H

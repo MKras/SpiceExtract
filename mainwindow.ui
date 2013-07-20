@@ -344,17 +344,28 @@
            <widget class="QLineEdit" name="model_path"/>
           </item>
           <item>
-           <widget class="QLabel" name="OutParce_Label">
-            <property name="text">
-             <string>OutParce</string>
-            </property>
-            <property name="alignment">
-             <set>Qt::AlignCenter</set>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QLineEdit" name="OutParce"/>
+           <layout class="QVBoxLayout" name="OutParse_verticalLayout">
+            <item>
+             <widget class="QLabel" name="OutParce_Label">
+              <property name="text">
+               <string>OutParce</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="Outparse_Layout">
+              <item>
+               <widget class="QComboBox" name="Outparse_cb_x"/>
+              </item>
+              <item>
+               <widget class="QComboBox" name="Outparse_cb_y"/>
+              </item>
+             </layout>
+            </item>
+           </layout>
           </item>
           <item>
            <widget class="QLabel" name="ErrorFunction_Label">
@@ -383,7 +394,7 @@
      <x>0</x>
      <y>0</y>
      <width>703</width>
-     <height>22</height>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">

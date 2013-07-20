@@ -175,7 +175,7 @@ private:
         enum Simulator {NGSpice, Spectre, GNUCap};// 1 - NGSpice, 2 - Spectre
         Simulator simulator;
 
-        string out_pars; //указывает какие колонки с результатами моделирования вырывать
+        OutParse_s out_pars; //указывает какие колонки с результатами моделирования вырывать
         string opt_path; //path to opt.conf file
         string prefix; //prefix to opt.conf e.g. ./srcipt/
         string spice_path; //path to spice sinulator
@@ -247,21 +247,18 @@ private:
 
         void setSpiceInputValues(string spicelib);
         double RunSimulation();
-        xyData runNGSpice(string spice_path, string tmpspicein, string tmpspiceout);
 public:
         xyData runNGSpice(string spice_path);
 private:
         //vector<double> GetSimulationResults(string spiceout);
         //vector<double> GetSimulationResults(string spiceout);
         //vector<double> GetExperimentResults(string spiceout);
-
-        xyData GetSimulationResults_xy(string sp_sim);
 public:
         xyData GetSimulationResults_xy(simulation_result_T sp_sim);
 private:
         xyData GetExperimentResults_xy(string sp_exp);
         bool NGSpiceOut(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy);
-        bool NGSpiceOut(simulation_result_T sp_sim, QString first, QString second, xyData *res_xy);
+        bool NGSpiceOut(simulation_result_T sp_sim, const string first, const string second, xyData *res_xy);
         bool GNUcapOut(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy);
         bool Spectre_psfascii_Out(QTextStream *stream, QTextStream *tmpstream, QString first, QString second, xyData *res_xy);
 

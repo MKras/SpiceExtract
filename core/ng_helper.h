@@ -45,7 +45,6 @@ class NGSpiceWrapper_Exception : public std::exception
 {
 private:
    std::string s;
-   bool no_bg = true;
 public:
    const char* what() const throw();
    NGSpiceWrapper_Exception(std::string ss);

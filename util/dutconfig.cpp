@@ -438,7 +438,7 @@ bool DUTconfig::changeCurve(QModelIndex idx, curve cur){
         //добавляем параметры экстракции, относящиеся к curve
         // ErrorFunction=2; и OutParse="{1};{2}";
         QDomElement OutParse = doc.createElement("OutParse");
-        OutParse.appendChild(doc.createTextNode(QString::fromStdString(cur.OutParse)));
+        OutParse.appendChild(doc.createTextNode(QString::fromStdString(cur.OutParse.pasrse_x+";"+cur.OutParse.pasrse_x)));
         newcurve.appendChild(OutParse);
         //qDebug()<<"changeCurveInfo OutParse = "<<QString::fromStdString(cur.OutParse);
         QDomElement ErrorFunction = doc.createElement("ErrorFunction");
@@ -718,9 +718,16 @@ curve DUTconfig::getCurveInfo(QModelIndex cur){
     //qDebug()<<"MODEL PATH: "<<getConfig(root).firstChildElement("SpiceModel").text()<<"\n";
     //qDebug()<<"child.firstChildElement(OutParse).text().toStdString() = "<<child.firstChildElement("OutParse").text();
 
-    res.OutParse=child.firstChildElement("OutParse").text().toStdString();
-    if(QString::fromStdString(res.OutParse)=="")
-        res.OutParse=QString("{1};{2}").toStdString();
+    //res.OutParse=child.firstChildElement("OutParse").text().toStdString();
+
+    QStringList parse = child.firstChildElement("OutParse").text().split(';');
+    if(0 == parse.at(0).length())
+        DUTconfig_Exception("X is not setted for parse");
+    res.OutParse.pasrse_x = std::string (parse.at(0).toStdString());
+    if(0 == parse.at(1).length())
+        DUTconfig_Exception("X is not setted for parse");
+    res.OutParse.pasrse_y = std::string (parse.at(1).toStdString());
+
     //qDebug()<<"getCurveInfo OutParse = "<<QString::fromStdString(res.OutParse);
     QString tErrorFunc = child.firstChildElement("ErrorFunction").text();
     if(tErrorFunc=="")
@@ -850,3 +857,9 @@ QVector<QString> DUTconfig::getSpiceVals(QString name){
     }
     return res;
 }
+
+//DUTconfig_Exception/////////////////////////////////
+const char* DUTconfig_Exception::what() const throw() { return s_.c_str(); }
+DUTconfig_Exception::DUTconfig_Exception(std::string s) : s_(s) {}
+DUTconfig_Exception::~DUTconfig_Exception()  throw() {}
+/////////////////////////////////DUTconfig_Exception

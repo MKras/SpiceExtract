@@ -433,7 +433,7 @@ int core (curve *cur, SpiceExtr *spe){
             }
         };
 
-        for(i=0;i<dim; i++){
+        for(size_t i=0;i<dim; i++){
             //resultvector(i+1)=mx[i];
             resultvector[i]=x[i];
         }
