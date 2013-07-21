@@ -26,6 +26,18 @@ namespace Ui {
     class MainWindow;
 }
 
+//TODO: make *_Exception class as template
+class MainWindow_Exception : public std::exception
+{
+private:
+   std::string s_;
+public:
+   const char* what() const throw();
+   MainWindow_Exception(std::string s);
+   ~MainWindow_Exception()  throw();
+};
+
+
 class MainWindow : public QMainWindow {
     Q_OBJECT
 public:

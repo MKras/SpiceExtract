@@ -60,7 +60,8 @@ MainWindow::MainWindow(QWidget *parent) :
                       this, SLOT(showFileTablePopup(const QPoint &)));
 
      ui->modelparamtableWidget->installEventFilter( this );
-     ui->OutParce->installEventFilter(this);
+     ui->Outparse_cb_x->installEventFilter(this);
+     ui->Outparse_cb_y->installEventFilter(this);
      ui->ErrorFunction->installEventFilter(this);
 
      reBbuildTree();
@@ -290,7 +291,10 @@ void MainWindow::fillTables(curve res){
 
 
     ui->model_path->setText(QString::fromStdString(res.model_path));
-    ui->OutParce->setText(QString::fromStdString(res.OutParse));
+    ui->Outparse_cb_x->clear();
+    ui->Outparse_cb_x->addItem(QString::fromStdString(res.OutParse.pasrse_x));
+    ui->Outparse_cb_y->clear();
+    ui->Outparse_cb_y->addItem(QString::fromStdString(res.OutParse.pasrse_y));
     //qDebug()<<"mainWindow fillTables res.OutParse = "<<QString::fromStdString(res.OutParse);
     ui->ErrorFunction->setText(QString("%1").arg(res.ErrorFunction));
 
@@ -539,7 +543,10 @@ curve MainWindow::fillCurve(){
         res.spiceMax.push_back(ui->modelparamtableWidget->item(i,3)->text().toStdString());
     }
     //OutParce и ErroFunc
-    res.OutParse=ui->OutParce->text().toStdString();
+    //res.OutParse=ui->OutParce->text().toStdString();
+
+    res.OutParse.pasrse_x=ui->Outparse_cb_x->currentText().toStdString();
+    res.OutParse.pasrse_y=ui->Outparse_cb_y->currentText().toStdString();
     //qDebug()<<"ui->OutParce->text() = "<<ui->OutParce->text();
     res.ErrorFunction=ui->ErrorFunction->text().toInt();
     //Алгоритм
@@ -1066,7 +1073,11 @@ bool MainWindow::eventFilter( QObject *obj, QEvent *evt )
                 //qDebug()<<"TEXT modelparamtableWidget: "<<ui->modelparamtableWidget->currentItem()->text();
                 changeCurve();
             }
-            if(ui->OutParce->hasFocus()){
+            if(ui->Outparse_cb_x->hasFocus()){
+                //qDebug()<<"TEXT modelparamtableWidget: "<<ui->modelparamtableWidget->currentItem()->text();
+                changeCurve();
+            }
+            if(ui->Outparse_cb_y->hasFocus()){
                 //qDebug()<<"TEXT modelparamtableWidget: "<<ui->modelparamtableWidget->currentItem()->text();
                 changeCurve();
             }
@@ -1102,6 +1113,10 @@ QMouseEvent *m = static_cast< QMouseEvent * >( evt );
     return QMainWindow::eventFilter( obj, evt );
   }
 
-
+//MainWindow_Exception/////////////////////////////////
+const char* MainWindow_Exception::what() const throw() { return s_.c_str(); }
+MainWindow_Exception::MainWindow_Exception(std::string s) : s_(s) {}
+MainWindow_Exception::~MainWindow_Exception()  throw() {}
+/////////////////////////////////MainWindow_Exception
 
 
