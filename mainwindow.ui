@@ -358,10 +358,22 @@
             <item>
              <layout class="QHBoxLayout" name="Outparse_Layout">
               <item>
-               <widget class="QComboBox" name="Outparse_cb_x"/>
+               <widget class="QComboBox" name="Outparse_cb_x">
+                <item>
+                 <property name="text">
+                  <string>{1}</string>
+                 </property>
+                </item>
+               </widget>
               </item>
               <item>
-               <widget class="QComboBox" name="Outparse_cb_y"/>
+               <widget class="QComboBox" name="Outparse_cb_y">
+                <item>
+                 <property name="text">
+                  <string>{2}</string>
+                 </property>
+                </item>
+               </widget>
               </item>
              </layout>
             </item>

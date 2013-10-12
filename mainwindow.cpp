@@ -249,7 +249,15 @@ if (idx.isValid())
             //и заполняем таблицы полученной инфой
             //fillTables(DUT->getCurveInfo(idx));
 
+            try{
             cur = DUT->getCurveInfo(idx);
+            }catch(DUTconfig_Exception& dcE)
+            {
+                qDebug()<<"MainWindow::treeItemSelected got: "<< QString::fromStdString(std::string(dcE.what()));
+            }catch(...)
+            {
+                qDebug()<<"MainWindow::treeItemSelected Unknown exception";
+            }
             cur.path = configfileName.toStdString();
 
 
@@ -545,8 +553,16 @@ curve MainWindow::fillCurve(){
     //OutParce и ErroFunc
     //res.OutParse=ui->OutParce->text().toStdString();
 
-    res.OutParse.pasrse_x=ui->Outparse_cb_x->currentText().toStdString();
-    res.OutParse.pasrse_y=ui->Outparse_cb_y->currentText().toStdString();
+    if(ui->Outparse_cb_x->currentText().size() > 0)
+        res.OutParse.pasrse_x=ui->Outparse_cb_x->currentText().toStdString();
+    else
+        throw MainWindow_Exception("Outparse_cb_x is empty");
+
+    if(ui->Outparse_cb_y->currentText().size() > 0)
+        res.OutParse.pasrse_y=ui->Outparse_cb_y->currentText().toStdString();
+    else
+        throw MainWindow_Exception("Outparse_cb_y is empty");
+
     //qDebug()<<"ui->OutParce->text() = "<<ui->OutParce->text();
     res.ErrorFunction=ui->ErrorFunction->text().toInt();
     //Алгоритм
