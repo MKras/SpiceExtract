@@ -236,6 +236,7 @@ bool MainWindow::isCurve(QModelIndex idx){
 void MainWindow::treeItemSelected(QModelIndex idx){
 QTextStream out(stdout);
 out<<"Index Mouse clicked\n";
+out<<idx.column()<<" "<<idx.row()<<"\n";
 curve cur;
 if (idx.isValid())
     {

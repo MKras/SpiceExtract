@@ -359,15 +359,29 @@
              <layout class="QHBoxLayout" name="Outparse_Layout">
               <item>
                <widget class="QComboBox" name="Outparse_cb_x">
+                <property name="enabled">
+                 <bool>true</bool>
+                </property>
+                <property name="editable">
+                 <bool>true</bool>
+                </property>
                 <item>
                  <property name="text">
                   <string>{1}</string>
+                 </property>
+                </item>
+                <item>
+                 <property name="text">
+                  <string>blah-blah</string>
                  </property>
                 </item>
                </widget>
               </item>
               <item>
                <widget class="QComboBox" name="Outparse_cb_y">
+                <property name="editable">
+                 <bool>true</bool>
+                </property>
                 <item>
                  <property name="text">
                   <string>{2}</string>
