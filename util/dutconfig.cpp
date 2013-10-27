@@ -680,6 +680,7 @@ QDomElement child=parent.firstChildElement("curve");
 
 //формируем структулу с инфой о конкретном шаге экстракции
 curve DUTconfig::getCurveInfo(QModelIndex cur){
+    //qDebug()<<"DUTconfig::getCurveInfo "<<"\n";
     curve res;
     QTextStream out(stdout);
 
@@ -710,7 +711,6 @@ curve DUTconfig::getCurveInfo(QModelIndex cur){
         }
         child=child.nextSiblingElement("curve");
     }
-
     //какой же алгоритм оптимизации используется?
     res.AlgOpt=child.firstChildElement("Alg").text().toStdString();
     //а где наша модель находится?
@@ -721,11 +721,20 @@ curve DUTconfig::getCurveInfo(QModelIndex cur){
     //res.OutParse=child.firstChildElement("OutParse").text().toStdString();
 
     QStringList parse = child.firstChildElement("OutParse").text().split(';');
+    //qDebug()<<"parse.size()"<<parse.size()<<"\n";
+    if (2 != parse.size()){
+        //throw (DUTconfig_Exception("OutParse parameters define probleme"));
+        parse<<QStringList(QString("a"))<<QStringList(QString("b"));
+        parse.clear();
+        parse.append(QString("fake"));
+        parse.append(QString("fake"));
+    }
+
     if(0 == parse.at(0).length())
-        DUTconfig_Exception("X is not setted for parse");
+        throw (DUTconfig_Exception("X is not setted for parse"));
     res.OutParse.pasrse_x = std::string (parse.at(0).toStdString());
     if(0 == parse.at(1).length())
-        DUTconfig_Exception("X is not setted for parse");
+        throw (DUTconfig_Exception("X is not setted for parse"));
     res.OutParse.pasrse_y = std::string (parse.at(1).toStdString());
 
     //qDebug()<<"getCurveInfo OutParse = "<<QString::fromStdString(res.OutParse);
