@@ -726,8 +726,8 @@ curve DUTconfig::getCurveInfo(QModelIndex cur){
         //throw (DUTconfig_Exception("OutParse parameters define probleme"));
         parse<<QStringList(QString("a"))<<QStringList(QString("b"));
         parse.clear();
-        parse.append(QString("fake"));
-        parse.append(QString("fake"));
+        parse.append(QString("empty"));
+        parse.append(QString("empty"));
     }
 
     if(0 == parse.at(0).length())

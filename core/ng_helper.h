@@ -26,6 +26,7 @@ typedef void *  funptr_t;
 #include <exception>
 #include <stdexcept>
 #include <boost/shared_ptr.hpp>
+#include <boost/weak_ptr.hpp>
 
 struct xyData{
         std::vector <double> x;

@@ -925,6 +925,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>Outparse_cb_x</sender>
+   <signal>activated(int)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>modelButtonClicked()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>541</x>
+     <y>414</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>351</x>
+     <y>248</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>treeItemSelected()</slot>

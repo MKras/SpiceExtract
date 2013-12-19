@@ -249,6 +249,7 @@ private:
         double RunSimulation();
 public:
         xyData runNGSpice(string spice_path);
+        std::vector<std::string> get_outputs(std::string & cir);
 private:
         //vector<double> GetSimulationResults(string spiceout);
         //vector<double> GetSimulationResults(string spiceout);

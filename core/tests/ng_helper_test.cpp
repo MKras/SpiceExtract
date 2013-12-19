@@ -16,20 +16,20 @@ BOOST_AUTO_TEST_CASE (NGSpiceWrapper_run_test)
     std::cout<<" ngw.Init_handlers();"<<std::endl;
     BOOST_CHECK_NO_THROW (ngw.NGngSpice_Init_handle());
 
-    BOOST_CHECK_EQUAL (boost::filesystem3::exists(boost::filesystem::path(std::string(CMAKE_SOURCE_DIR)+std::string("/resourses/tests_data/ngspice_wrapper_data"))), true);
+    BOOST_CHECK_EQUAL (boost::filesystem::exists(boost::filesystem::path(std::string(CMAKE_SOURCE_DIR)+std::string("/resourses/tests_data/ngspice_wrapper_data"))), true);
     boost::filesystem::path path (std::string(CMAKE_SOURCE_DIR)+std::string("/resourses/tests_data/ngspice_wrapper_data"));
 
-    BOOST_CHECK_NO_THROW (copy_file(path/"idsvds1.1.cir",boost::filesystem::current_path()/"idsvds1.1.cir",boost::filesystem3::copy_option::overwrite_if_exists));
-    BOOST_CHECK_EQUAL(boost::filesystem3::exists(path/"idsvds1.1.cir"), true);
+    BOOST_CHECK_NO_THROW (copy_file(path/"idsvds1.1.cir",boost::filesystem::current_path()/"idsvds1.1.cir",boost::filesystem::copy_option::overwrite_if_exists));
+    BOOST_CHECK_EQUAL(boost::filesystem::exists(path/"idsvds1.1.cir"), true);
 
-    BOOST_CHECK_NO_THROW (copy_file(path/"idsvds1.1.cir",boost::filesystem::current_path()/"idsvds1.1.cir",boost::filesystem3::copy_option::overwrite_if_exists));
-    BOOST_CHECK_EQUAL(boost::filesystem3::exists(path/"idsvds1.1.cir"), true);
+    BOOST_CHECK_NO_THROW (copy_file(path/"idsvds1.1.cir",boost::filesystem::current_path()/"idsvds1.1.cir",boost::filesystem::copy_option::overwrite_if_exists));
+    BOOST_CHECK_EQUAL(boost::filesystem::exists(path/"idsvds1.1.cir"), true);
 
-    BOOST_CHECK_NO_THROW (copy_file(path/"idsvds1.1.exp",boost::filesystem::current_path()/"idsvds1.1.exp",boost::filesystem3::copy_option::overwrite_if_exists));
-    BOOST_CHECK_EQUAL(boost::filesystem3::exists(path/"idsvds1.1.exp"), true);
+    BOOST_CHECK_NO_THROW (copy_file(path/"idsvds1.1.exp",boost::filesystem::current_path()/"idsvds1.1.exp",boost::filesystem::copy_option::overwrite_if_exists));
+    BOOST_CHECK_EQUAL(boost::filesystem::exists(path/"idsvds1.1.exp"), true);
 
-    BOOST_CHECK_NO_THROW (copy_file(path/"spicelib.slb",boost::filesystem::current_path()/"spicelib.slb",boost::filesystem3::copy_option::overwrite_if_exists));
-    BOOST_CHECK_EQUAL(boost::filesystem3::exists(path/"spicelib.slb"), true);
+    BOOST_CHECK_NO_THROW (copy_file(path/"spicelib.slb",boost::filesystem::current_path()/"spicelib.slb",boost::filesystem::copy_option::overwrite_if_exists));
+    BOOST_CHECK_EQUAL(boost::filesystem::exists(path/"spicelib.slb"), true);
 
     std::string spice_cir = "idsvds1.1.cir";
     BOOST_CHECK_NO_THROW(ngw.load_cir(spice_cir));

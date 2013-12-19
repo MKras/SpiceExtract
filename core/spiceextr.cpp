@@ -66,8 +66,7 @@ stop=false;
         simulator = NGSpice;
 
         //Init NGwrapper
-        NGSpiceWrapper *NGWrapper_p = new NGSpiceWrapper();
-        NGWrapper_ = boost::shared_ptr<NGSpiceWrapper>(NGWrapper_p);
+        NGWrapper_.reset(new NGSpiceWrapper());
         NGWrapper_->Init_dll_handler();
         NGWrapper_->Init_handlers();
         NGWrapper_->NGngSpice_Init_handle();
@@ -589,6 +588,8 @@ int SpiceExtr::CountExperimentPoints(){
 xyData SpiceExtr::runNGSpice(string spice_path){
     qDebug()<<"runNGSpice or GNUCap";
 
+    qDebug()<<"SpiceExtr::runNGSpice spice_path="<<QString::fromStdString(spice_path);
+
     NGWrapper_->load_cir(spice_path);
 
 
@@ -645,7 +646,7 @@ double SpiceExtr::RunSimulation(){
 
                     //runNGSpice(spice_path, tmpspicein, tmpspiceout);
                     qDebug()<<"before ReStmp["<<i<<"]"<<" "<<QString::fromStdString(exec);
-                    res=res+CompareCurves(runNGSpice(spice_path),GetExperimentResults_xy(tmpspiceexp), tmpspiceout, tmpspiceexp);
+                    res=res+CompareCurves(runNGSpice(tmpspicein),GetExperimentResults_xy(tmpspiceexp), tmpspiceout, tmpspiceexp);
                     qDebug()<<"piceExtr::RunSimulation ReStmp["<<i<<"] ="<<res;
                 }
                 else {
@@ -1950,6 +1951,18 @@ void SpiceExtr::MultiRun(int dim, double* x, double& fx, int& result){
 
 void SpiceExtr::kill(){
     stop=true;
+}
+
+std::vector<std::string> SpiceExtr::get_outputs(std::string & cir){
+    std::vector<std::string> res;
+
+    boost::weak_ptr<NGSpiceWrapper> NGWrapper_w(NGWrapper_);
+
+    if(boost::shared_ptr<NGSpiceWrapper> ngw = NGWrapper_w.lock()){
+        ngw->load_cir(cir);
+    }
+
+    return res;
 }
 
 //NGSpiceWrapper_Exception/////////////////////////////////

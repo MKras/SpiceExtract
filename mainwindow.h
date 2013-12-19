@@ -12,6 +12,7 @@
 #include "util/globals.h"
 #include "util/editorthread.h"
 #include "core/core.h"
+#include "core/spiceextr.h"
 #include "gui/plot.h"
 #include "gui/manualfit.h"
 #include "gui/curveselection.h"
@@ -138,6 +139,7 @@ private slots:
       void about();
       void OptParamsEdit();
       void changeOptParams(curve cur);
+      void reload_cir_outputs();
 
 
 

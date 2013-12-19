@@ -1,3 +1,4 @@
+#include <memory>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QtGui>
@@ -115,6 +116,11 @@ void MainWindow::construct(){
     QObject::connect(action_Roll_back, SIGNAL(activated()), this, SLOT(rollBack()));
     QObject::connect(actionExtractAll, SIGNAL(activated()), this, SLOT(ExtractAll()));
     QObject::connect(actionSelect, SIGNAL(activated()), this, SLOT(CurveSelect()));
+    QObject::connect(actionSelect, SIGNAL(activated()), this, SLOT(CurveSelect()));
+    QObject::connect(ui->Outparse_cb_x, SIGNAL(activated(int)), this, SLOT(reload_cir_outputs()));
+
+
+    //reload_cir_outputs
 };
 
 MainWindow::~MainWindow()
@@ -707,6 +713,9 @@ void MainWindow::run(curve cur){
 
                 //qDebug()<<"MainWindow::run "<<QString::fromStdString(cur.model_path)<<"\n";
 
+     qDebug()<<"MainWindow::run configfileName = "<<configfileName<<"\n";
+
+
 
                 extr = new ExtrThread(cur, configfileName);
 
@@ -1129,6 +1138,62 @@ QMouseEvent *m = static_cast< QMouseEvent * >( evt );
 
     return QMainWindow::eventFilter( obj, evt );
   }
+
+void MainWindow::reload_cir_outputs()
+{
+
+    QModelIndex idx = ui->treeView->currentIndex();
+    curve cur;
+
+    if (idx.isValid())
+        {
+            if(isDevice(idx)){
+
+            }
+            if(isCurve(idx)){
+                //если выбрана характеристика, а не прибор,
+                //формируем структуру с необходимой онформацией
+                //для ее представления
+                //и заполняем таблицы полученной инфой
+
+                //qDebug()<<"MainWindow::calculate "<<QString::fromStdString(cur.model_path)<<"\n";
+                cur = DUT->getCurveInfo(idx);
+                cur.path = configfileName.toStdString();
+                //run(cur);
+
+//                //std::auto_ptr<NGSpiceWrapper > ngSpiceWrapper();
+//                NGSpiceWrapper nw();
+
+//                if(cur.inFile.size() > 0){
+//                    //ngSpiceWrapper->load_cir(cur.inFile[0]);
+//                    nw.load_cir(cur.inFile[0].c_str());
+//                }else{
+//                    MainWindow_Exception("MainWindow::reload_cir_outputs - no Spice Input file");
+//                }
+
+//                ngSpiceWrapper->load_cir(spice_cir);
+//                ngSpiceWrapper->bg_run();
+//                ngSpiceWrapper->wait_until_simulation_finishes();
+//                simulation_result_T res = ngSpiceWrapper->get_AllVecs(ngw.get_CurPlot());
+
+
+
+            }
+
+}
+    //res.inFile.push_back(ui->filestableWidget->item(i,0)->text().toStdString());
+    std::string spice_cir = ui->filestableWidget->item(0,0)->text().toStdString();
+    std::string model_path = ui->model_path->text().toStdString();
+
+    if (model_path.empty() || spice_cir.empty())
+        throw MainWindow_Exception("Can't get out params. Model path or CIR path is empty");
+
+    extr = new ExtrThread(cur, configfileName);
+      extr->start();
+
+
+
+}
 
 //MainWindow_Exception/////////////////////////////////
 const char* MainWindow_Exception::what() const throw() { return s_.c_str(); }
