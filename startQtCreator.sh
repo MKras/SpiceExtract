@@ -1,6 +1,9 @@
 #!/bin/sh
 pwd_path=`pwd`
 
+export CC=/usr/bin/clang
+export CXX=/usr/bin/clang++
+
 DIRECTORY=SpiceExtract-build
 
 export BUILD_ROOT=$pwd_path/../$DIRECTORY

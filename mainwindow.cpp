@@ -1180,16 +1180,16 @@ void MainWindow::reload_cir_outputs()
 
             }
 
-}
-    //res.inFile.push_back(ui->filestableWidget->item(i,0)->text().toStdString());
-    std::string spice_cir = ui->filestableWidget->item(0,0)->text().toStdString();
-    std::string model_path = ui->model_path->text().toStdString();
+            //res.inFile.push_back(ui->filestableWidget->item(i,0)->text().toStdString());
+            std::string spice_cir = ui->filestableWidget->item(0,0)->text().toStdString();
+            std::string model_path = ui->model_path->text().toStdString();
 
-    if (model_path.empty() || spice_cir.empty())
-        throw MainWindow_Exception("Can't get out params. Model path or CIR path is empty");
+            if (model_path.empty() || spice_cir.empty())
+                throw MainWindow_Exception("Can't get out params. Model path or CIR path is empty");
 
-    extr = new ExtrThread(cur, configfileName);
-      extr->start();
+            extr = new ExtrThread(cur, configfileName);
+              extr->start();
+        }
 
 
 
