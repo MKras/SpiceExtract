@@ -26,6 +26,7 @@
 #include "core/ng_helper.h"
 #include "core/sharedspice.h"
 #include <iostream>
+#include <fstream>
 
 bool no_bg = true;
 bool not_yet = true;
@@ -368,6 +369,7 @@ public:
 #elif __MINGW32__
         ret = ((int * (*)(char*)) ngSpice_Command_handle)(std::string( (char*)&cir_path_t[0]);
 #else
+        std::cout<<"\nvoid load_cir(std::string & cir_path): "<<cir_path<<std::endl;
         ret = ((int * (*)(char*)) ngSpice_Command_handle)(  (char*)&cir_path[0]);
 #endif
     }
@@ -506,6 +508,21 @@ public:
         return true;
     }
 };
+
+std::vector<std::string> spice_cir_to_vector(std::string spice_path){
+    std::vector<std::string> res;
+    std::ifstream file (spice_path.c_str(), std::ios::in);
+    if (file.is_open()){
+        std::string line;
+        while(getline(file, line)){
+            res.push_back(line);
+        };
+    }else{
+        NGSpiceWrapper_Exception("can't open CIR file "+spice_path);
+    }
+
+    return res;
+}
 
 NGSpiceWrapper::NGSpiceWrapper():
     ngSpice_Init_handle (NULL)

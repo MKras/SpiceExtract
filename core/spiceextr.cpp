@@ -585,39 +585,8 @@ int SpiceExtr::CountExperimentPoints(){
         return ExperimentPoints;
 };
 
-namespace{
-std::vector<std::string> spice_cir_to_vector(std::string spice_path){
-    std::vector<std::string> res;
-
-    QFile file(QString::fromStdString(spice_path));
-    if (file.open(QIODevice::ReadOnly)){
-        QTextStream stream( &file );
-        QString line;
-        while(!stream.atEnd()){
-            line = stream.readLine();
-            res.push_back(line.toStdString());
-        };
-
-        // QFile sim(QString::fromStdString("./"+spiceout[i]));
-//        if(sim.open(QIODevice::ReadOnly)){
-//            QTextStream stream( &sim );
-//                QString line;
-//                while(!stream.atEnd()){
-//                    line = stream.readLine();
-
-
-    }else{
-        qDebug()<<"spice_cir_to_vector can't open CIR file "<<QString::fromStdString(spice_path)<<endl;
-    }
-
-    return res;
-}
-}
-
 xyData SpiceExtr::runNGSpice(string spice_path){
     qDebug()<<"runNGSpice or GNUCap";
-
-
 
     QDir dir;
     qDebug() <<"Current Dir: " << dir.absolutePath() << endl;
@@ -625,10 +594,10 @@ xyData SpiceExtr::runNGSpice(string spice_path){
     std::string path = dir.absolutePath().toStdString()+"/"+spice_path;
     qDebug()<<"SpiceExtr::runNGSpice spice_path="<<QString::fromStdString(path);
 
-   std::vector<std::string> cir_vec = spice_cir_to_vector(spice_path);
+   //std::vector<std::string> cir_vec = spice_cir_to_vector(spice_path);
+    //NGWrapper_->load_cir(cir_vec);
 
-    NGWrapper_->load_cir(cir_vec);
-
+    NGWrapper_->load_cir(spice_path);
 
     //exec=spice_path+" "+tmpspicein+" > "+tmpspiceout;
 

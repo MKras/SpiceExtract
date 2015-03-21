@@ -121,6 +121,8 @@ private:
 
 };
 
+std::vector<std::string> spice_cir_to_vector(std::string spice_path);
+
 // example
 //int main()
 //{
