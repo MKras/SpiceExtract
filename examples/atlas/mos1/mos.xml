@@ -95,7 +95,7 @@
   <device name="large">
    <curve name="ivg_1">
     <Alg>Evaluate</Alg>
-    <OutParse>{9};{3}</OutParse>
+    <OutParse>v-sweep;vd#branch</OutParse>
     <ErrorFunction>2</ErrorFunction>
     <file num="1">
      <Cir>atlas/mos1/idvg_1/idsvgs1.cir</Cir>
