@@ -216,6 +216,8 @@ bool MainWindow::reBbuildTree(){
 }
 
 bool MainWindow::save(){
+    changeCurve();
+    qDebug()<<"MainWindow::save() configfileName="<<configfileName;
     if(DUT->save(configfileName)) return true;
     else {
         QMessageBox::warning(this, "ALARM!", "File "+configfileName+" Not Saved");

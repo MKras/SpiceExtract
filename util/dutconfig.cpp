@@ -438,9 +438,9 @@ bool DUTconfig::changeCurve(QModelIndex idx, curve cur){
         //добавляем параметры экстракции, относящиеся к curve
         // ErrorFunction=2; и OutParse="{1};{2}";
         QDomElement OutParse = doc.createElement("OutParse");
-        OutParse.appendChild(doc.createTextNode(QString::fromStdString(cur.OutParse.pasrse_x+";"+cur.OutParse.pasrse_x)));
+        OutParse.appendChild(doc.createTextNode(QString::fromStdString(cur.OutParse.pasrse_x+";"+cur.OutParse.pasrse_y)));
         newcurve.appendChild(OutParse);
-        //qDebug()<<"changeCurveInfo OutParse = "<<QString::fromStdString(cur.OutParse);
+        qDebug()<<"changeCurveInfo OutParse = "<<QString::fromStdString(cur.OutParse.pasrse_x)<<";"<<QString::fromStdString(cur.OutParse.pasrse_y);
         QDomElement ErrorFunction = doc.createElement("ErrorFunction");
         ErrorFunction.appendChild(doc.createTextNode(QString("%1").arg(cur.ErrorFunction)));
         newcurve.appendChild(ErrorFunction);
@@ -734,7 +734,7 @@ curve DUTconfig::getCurveInfo(QModelIndex cur){
         throw (DUTconfig_Exception("X is not setted for parse"));
     res.OutParse.pasrse_x = std::string (parse.at(0).toStdString());
     if(0 == parse.at(1).length())
-        throw (DUTconfig_Exception("X is not setted for parse"));
+        throw (DUTconfig_Exception("Y is not setted for parse"));
     res.OutParse.pasrse_y = std::string (parse.at(1).toStdString());
 
     //qDebug()<<"getCurveInfo OutParse = "<<QString::fromStdString(res.OutParse);

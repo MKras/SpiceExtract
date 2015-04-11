@@ -247,6 +247,7 @@ private:
 
         void setSpiceInputValues(string spicelib);
         double RunSimulation();
+        void save_simulation_result(xyData& sim_res, std::string& file);
 public:
         xyData runNGSpice(string spice_path);
         std::vector<std::string> get_outputs(std::string & cir);
@@ -265,7 +266,7 @@ private:
 
 
         //double CompareCurves(vector <double> sim, vector <double> exp);
-        double CompareCurves( xyData sim, xyData exp, string Fout, string Fexp);
+        double CompareCurves(xyData &sim, xyData &exp, string &Fout, string &Fexp);
         double CompareCurves_Err1( xyData sim, xyData exp);
         double CompareCurves_Err2( xyData sim, xyData exp);
         double CompareCurves_Err3( xyData sim, xyData exp);

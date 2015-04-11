@@ -27,6 +27,7 @@
 #include <QValidator>
 #include <QProcess>
 #include <QtScript>
+#include <QErrorMessage>
 
 using namespace std;
 
@@ -586,7 +587,7 @@ int SpiceExtr::CountExperimentPoints(){
 };
 
 xyData SpiceExtr::runNGSpice(string spice_path){
-    qDebug()<<"runNGSpice or GNUCap";
+    qDebug()<<"runNGSpice";
 
     QDir dir;
     qDebug() <<"Current Dir: " << dir.absolutePath() << endl;
@@ -613,6 +614,24 @@ xyData SpiceExtr::runNGSpice(string spice_path){
      return res;
 
 }
+
+
+void SpiceExtr::save_simulation_result(xyData& sim_res, std::string& file){
+    //сохраняем аппроксимированные значения в файл (результат моделирования)
+    QFile Fsim(QString::fromStdString("./"+file));
+    Fsim.remove(QString::fromStdString("./"+file));
+    if(Fsim.open(QIODevice::ReadWrite)){
+        QTextStream stream( &Fsim );
+        for (int i=0;i<sim_res.y.size();i++){
+            stream<<sim_res.x[i]<<" "<<sim_res.y[i]<<endl;
+        }
+    }else{
+        cerr<<"Can't open file for GetSimulationResults ";
+    };
+    Fsim.close();
+}
+
+
 double SpiceExtr::RunSimulation(){    
         char *cp=get_current_dir_name ();
 
@@ -628,6 +647,7 @@ double SpiceExtr::RunSimulation(){
         chdir(cddir.c_str());
 
         qDebug()<<"SpiceExtr::RunSimulation start loop";
+        try{
         for(size_t i=0;i<spicein.size();i++){
 
 
@@ -652,12 +672,23 @@ double SpiceExtr::RunSimulation(){
 
                     //runNGSpice(spice_path, tmpspicein, tmpspiceout);
                     qDebug()<<"before ReStmp["<<i<<"]"<<" "<<QString::fromStdString(exec);
-                    res=res+CompareCurves(runNGSpice(tmpspicein),GetExperimentResults_xy(tmpspiceexp), tmpspiceout, tmpspiceexp);
+
+                    xyData simulation_result = runNGSpice(tmpspicein);
+                    xyData experiment_data = GetExperimentResults_xy(tmpspiceexp);
+
+                    res=res+CompareCurves(simulation_result,experiment_data, tmpspiceout, tmpspiceexp);
+
+                    save_simulation_result(simulation_result, tmpspiceout);
+
                     qDebug()<<"piceExtr::RunSimulation ReStmp["<<i<<"] ="<<res;
                 }
                 else {
                     SpiceExtr_Exception("Unknown simulator");
                 }
+        }
+        }catch(NGSpiceWrapper_Exception& e)
+        {
+            qDebug()<<"SpiceExtr::RunSimulation() exception: "<<e.what();
         }
         chdir(cp);        
         res=res/spicein.size();        
@@ -1046,6 +1077,7 @@ xyData SpiceExtr::GetSimulationResults_xy(simulation_result_T sp_sim){
     xyData res_xy;
 
     if(simulator==NGSpice){//NGSpice
+        qDebug()<<"Getting simulation for curve"<<QString::fromStdString(out_pars.pasrse_x)<<" ("<<QString::fromStdString(out_pars.pasrse_y)<<") ";
         NGSpiceOut(sp_sim,  out_pars.pasrse_x, out_pars.pasrse_y, &res_xy);
         qDebug()<<"NGSpiceOut";
     }else throw SpiceExtr_Exception("Not supported simulator");
@@ -1457,7 +1489,7 @@ xyData SpiceExtr::interpolation(xyData *sim, xyData *exp){
     return simOut;
 }
 
-double SpiceExtr::CompareCurves( xyData sim, xyData exp, string Fout, string Fexp){
+double SpiceExtr::CompareCurves( xyData& sim, xyData& exp, string& Fout, string& Fexp){
 
         double res;//,tmp, a;
         //int zero=0; //для учета нулевого значения знаменателя, чтобы избежать деление на нуль
@@ -1473,6 +1505,11 @@ double SpiceExtr::CompareCurves( xyData sim, xyData exp, string Fout, string Fex
         //на случай, когда при моделировании произошла ошибка (например, длина канала отрицательна)
         //и нету результатов расчета
         qDebug()<<"sim.y.size() and exp.y.size() = "<<sim.y.size()<<"    "<<exp.y.size();
+
+        qDebug()<<"sim.X \t sim.y \t exp.x \t epx.y";
+        for (size_t i=0;i<sim.x.size();i++) {
+            qDebug()<<sim.x[i]<<" \t"<<sim.y[i]<<" \t"<<exp.x[i]<<" \t"<<exp.y[i];
+        };
 
         if (sim.y.size()!=exp.y.size()){
             //если не заполнены экспериментальные данные

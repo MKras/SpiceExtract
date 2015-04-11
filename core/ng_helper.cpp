@@ -430,7 +430,7 @@ public:
                     plot_data_T plot_data;
                     for (int k = 0; k<veclength; k++)
                     {
-                        //printf ("vector %s data %f k=%i\n" ,plotvec, myvec->v_realdata[k], k);
+                        printf ("vector %s data %f k=%i\n" ,plotvec, myvec->v_realdata[k], k);
                         plot_data.push_back(myvec->v_realdata[k]);
                     }
                     plots_data[std::string(vecname_)] = plot_data;
@@ -500,7 +500,7 @@ public:
             throw NGSpiceWrapper_Exception(error);
         }
         for(plot_data_T::iterator it =  sp_sim.vec_data[first_].begin(); it != sp_sim.vec_data[first_].end(); it++){
-            res_xy->x.push_back(*it);
+            res_xy->x.push_back(*it);            
         }
         for(plot_data_T::iterator it =  sp_sim.vec_data[second_].begin(); it != sp_sim.vec_data[second_].end(); it++){
             res_xy->y.push_back(*it);

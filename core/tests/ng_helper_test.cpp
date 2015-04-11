@@ -61,7 +61,7 @@ BOOST_AUTO_TEST_CASE (NGSpiceWrapper_run_test)
     ngw.NGSpiceOut(res, "v-sweep", "vd#branch", &xy_compare);
 
     for(int i = 0; i < xy_compare.x.size(); i++){
-        //std::cout<<xy_compare.x[i]<<" "<<xy_compare.y[i]<<std::endl;
+        std::cout<<xy_compare.x[i]<<" "<<xy_compare.y[i]<<std::endl;
         BOOST_CHECK_EQUAL( xy_compare.x[i], xy.x[i] );
         BOOST_CHECK_EQUAL( xy_compare.y[i], xy.y[i] );
     }
@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE (NGSpiceWrapper_run_test)
     try{
         ngw.NGSpiceOut(res, "v-sweep", "vd#branc", &xy_compare);
     }catch(NGSpiceWrapper_Exception &e){
-        std::cout<<e.what()<<std::endl;
+        //std::cout<<e.what()<<std::endl;
         catched = true;
     }
 
